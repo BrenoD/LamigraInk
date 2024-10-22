@@ -1,10 +1,11 @@
 package main
 
 import (
-    "LaMigraInk/backend/config"  // Altere para o caminho correto do seu módulo
-    "LaMigraInk/backend/handlers" // Altere para o caminho correto do seu módulo
-    "github.com/gin-gonic/gin"
-    "log"
+	"LaMigraInk/backend/config"   // Altere para o caminho correto do seu módulo
+	"LaMigraInk/backend/handlers" // Altere para o caminho correto do seu módulo
+	"log"
+
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
@@ -21,12 +22,11 @@ func main() {
     // Inicializa o router do Gin
     router := gin.Default()
 
-    // Define a rota para criar gift cards
-    router.POST("/giftcard", handlers.CreateNewGiftCardHandler)
-
+    // gift cards
+    router.POST("/giftcard", handlers.ProcessGiftCardCreationAndSendEmailHandler)
     router.POST("/use-giftcard", handlers.UseGiftCardHandler)
-
-
+    
+    
     // Inicia o servidor na porta 8080
     if err := router.Run(":8080"); err != nil {
         log.Fatalf("Falha ao iniciar o servidor: %v", err)

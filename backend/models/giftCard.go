@@ -6,3 +6,9 @@ type Giftcard struct{
     Value     float32 `json:"value"`     
     Status    string  `json:"status"`
 }
+
+type GiftcardRequest struct {
+    RecipientName string  `json:"recipientname"`
+	Email         string  `json:"email"`
+    Value        float32 `json:"value"`
+}

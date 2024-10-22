@@ -29,6 +29,26 @@ func CreateNewGiftCardHandler(c *gin.Context){
 	})
 }
 
+func ProcessGiftCardCreationAndSendEmailHandler(c *gin.Context){
+
+	var request models.GiftcardRequest
+
+	if err := c.ShouldBindJSON(&request); err != nil {
+		c.JSON(400, gin.H{"error": err.Error()})
+		return
+	}
+
+	err := services.ProcessGiftCardCreationAndSendEmail(request)
+	if err != nil {
+		c.JSON(400, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Gift card successfully sended!",
+	})
+}
+
 func UseGiftCardHandler(c *gin.Context) {
 	// Estrutura para receber o JSON de entrada (com o código do giftcard)
 	var request struct {

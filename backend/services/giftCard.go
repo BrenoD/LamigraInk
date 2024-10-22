@@ -2,6 +2,7 @@ package services
 
 import (
 	"LaMigraInk/backend/config"
+	"LaMigraInk/backend/models"
 	"database/sql"
 	"fmt"
 
@@ -48,5 +49,25 @@ func disableGiftCard(code string) error {
 	if err != nil {
 		return fmt.Errorf("error disabling gift card: %v", err)
 	}
+	return nil
+}
+
+func ProcessGiftCardCreationAndSendEmail(request models.GiftcardRequest) error {
+
+	code, err := CreateNewGiftCard(request.Value)
+	if err != nil {
+		return fmt.Errorf("Erro ao criar o gift card: %v", err)
+	}
+
+	giftcard := models.Giftcard{
+		Code:  code,
+		Value: request.Value,
+	}
+
+	err = SendGiftCardEmail(request, giftcard.Code)
+	if err != nil {
+		return fmt.Errorf("Erro ao enviar o gift card por email: %v", err)
+	}
+
 	return nil
 }
