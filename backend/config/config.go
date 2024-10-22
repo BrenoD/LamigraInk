@@ -26,7 +26,6 @@ func OpenConn() error {
     dbName := os.Getenv("DB_NAME")
     dbHost := os.Getenv("DB_HOST")
     dbPort := os.Getenv("DB_PORT")
-    
 
     // Cria a string de conexão
     connStr := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",

@@ -22,10 +22,14 @@ func main() {
     // Inicializa o router do Gin
     router := gin.Default()
 
-    // gift cards
+    // Rotas para gift cards (já existentes no seu projeto)
     router.POST("/giftcard", handlers.ProcessGiftCardCreationAndSendEmailHandler)
     router.POST("/use-giftcard", handlers.UseGiftCardHandler)
-    
+
+    // Rota para WebSocket do chat ao vivo
+    router.GET("/ws", func(c *gin.Context) {
+        handlers.ChatHandler(c.Writer, c.Request) // Handler para WebSocket
+    })
     
     // Inicia o servidor na porta 8080
     if err := router.Run(":8080"); err != nil {

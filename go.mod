@@ -4,7 +4,10 @@ go 1.22.6
 
 require github.com/gin-gonic/gin v1.10.0
 
-require github.com/lib/pq v1.10.9 // indirect
+require (
+	github.com/gorilla/websocket v1.5.3 // indirect
+	github.com/lib/pq v1.10.9 // indirect
+)
 
 require (
 	github.com/bytedance/sonic v1.11.6 // indirect
