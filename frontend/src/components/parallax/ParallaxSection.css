@@ -1,0 +1,53 @@
+/* Parallax Section */
+.parallax-section {
+    background-image: url('parallaxTestImage.jpg'); /* Substitua pelo caminho da sua imagem */
+    height: 100vh;
+    background-attachment: fixed;
+    background-position: left center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    justify-content: flex-end; /* Alinha o conteúdo à direita */
+    align-items: center;
+  }
+  
+  .text-container {
+    color: white;
+    padding: 20px;
+    max-width: 600px;
+    margin-right: 50px; /* Espaçamento à direita */
+    text-align: right;  /* Alinha o texto à direita */
+  }
+  
+  .fade-in-text {
+    opacity: 0;
+    animation: fadeIn 1.5s forwards;
+  }
+  
+  .delay-1 {
+    animation-delay: 0s;
+  }
+  
+  .delay-2 {
+    animation-delay: 1.5s;
+  }
+  
+  .delay-3 {
+    animation-delay: 3s;
+  }
+  .delay-4 {
+    animation-delay: 4.5s;
+  }
+  
+  /* Keyframes para fade-in */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  

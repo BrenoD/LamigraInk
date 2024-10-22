@@ -1,0 +1,31 @@
+.footer {
+    background-color: #333;
+    color: white;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .footer-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  
+  .logo {
+    width: 150px; /* Ajuste o tamanho do logo conforme necessário */
+    height: 50px; /* Ajuste a altura conforme necessário */
+    background-image: url('./backgrondTest.jpeg'); /* Substitua pelo caminho do seu logo */
+    background-size: contain; /* Ou use cover se preferir */
+    background-repeat: no-repeat; /* Para evitar repetição da imagem */
+  }
+  
+  .contact, .location {
+    margin: 10px;
+  }
+  
+  .footer-bottom {
+    margin-top: 20px;
+    font-size: 0.8rem;
+  }
+  
