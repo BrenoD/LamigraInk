@@ -4,6 +4,12 @@ import { FaInstagram, FaFacebookF, FaTwitter } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import ChatPopup from '../components/ChatPopup'; // Importando o ChatPopup
+import Header from '@/components/header';
+import Parallax from '@/components/parallax';
+import HoverSection from '@/components/hoverSection';
+import ArtistsSection from '@/components/artistsSection';
+import AboutUsHoverSection from '@/components/AboutUsHoverSection';
+import Footer from '@/components/Footer';
 
 export default function LandingPage() {
   const [showChat, setShowChat] = useState(false); // Estado para controlar a exibição do chat
@@ -14,14 +20,7 @@ export default function LandingPage() {
       <div className="absolute top-0 left-0 w-64 h-64 bg-red-600 clip-triangle rotate-45 opacity-60"></div>
       <div className="absolute top-0 right-0 w-64 h-64 bg-red-600 clip-triangle rotate-45 opacity-60"></div>
 
-      <header className="flex justify-between items-center p-4 bg-black shadow-md z-10 relative">
-        <div className="text-3xl font-bold">Led's Tattoo</div>
-        <nav className="flex space-x-6">
-          <a href="#about" className="hover:text-gray-400">Sobre</a>
-          <a href="#services" className="hover:text-gray-400">Serviços</a>
-          <a href="#contact" className="hover:text-gray-400">Contato</a>
-        </nav>
-      </header>
+      <Header/>
 
       {/* Hero Section */}
       <motion.section
@@ -53,6 +52,12 @@ export default function LandingPage() {
           Agende sua consulta
         </motion.button>
       </motion.section>
+
+      <Parallax/>
+      <HoverSection/>
+      <ArtistsSection/>
+      <AboutUsHoverSection/>
+      <Footer/>
 
       {/* About Section */}
       <section id="about" className="py-20 bg-gray-900 text-center">

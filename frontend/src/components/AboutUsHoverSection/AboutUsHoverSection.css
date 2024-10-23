@@ -1,0 +1,72 @@
+/* Seção principal que contém tudo */
+.hover-section {
+    width: 100%;
+    overflow: hidden;
+  }
+  
+  /* Cada imagem ocupa 100% da largura da tela e uma altura fixa */
+  .image-box {
+    position: relative;
+    width: 100%;
+    height: 50vh; /* Ocupa a altura da viewport */
+    overflow: hidden;
+    background: #000; /* Fundo preto padrão */
+  }
+  
+  /* A imagem a ser revelada */
+  .reveal-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.1); /* Leve zoom inicial */
+    opacity: 0; /* Escondida antes do hover */
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+  }
+  
+  /* Quando o usuário passar o mouse, a imagem é revelada */
+  .image-box:hover .reveal-image {
+    opacity: 1;
+    transform: scale(1); /* Retorna ao tamanho normal */
+  }
+  
+  /* Texto sobreposto no meio da imagem */
+  .overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: white;
+    z-index: 2;
+    opacity: 0; /* Escondido inicialmente */
+    transition: opacity 1s ease-in-out 0.5s; /* Atraso de 0.5s para revelar o texto */
+  }
+  
+  /* No hover, o texto aparece */
+  .image-box:hover .overlay {
+    opacity: 1;
+  }
+  
+  /* Efeito de parallax na imagem de fundo */
+  .image-box::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('backgrondTest.jpeg'); /* Imagem de fundo comum */
+    background-attachment: fixed;
+    background-position: center;
+    background-size: cover;
+    z-index: 1;
+    transition: opacity 0.5s ease-in-out;
+  }
+  
+  .image-box:hover::before {
+    opacity: 0; /* Some com a imagem parallax no hover */
+  }
+  

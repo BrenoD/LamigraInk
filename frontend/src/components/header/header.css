@@ -1,0 +1,68 @@
+.header {
+    background-color: #2C2C2C;
+    padding: 10px 0;
+    position: fixed; /* Fixa o header no topo */
+    top: 0; /* Alinha no topo da página */
+    left: 0;
+    width: 100%; /* Faz o header ocupar toda a largura da tela */
+    z-index: 1000; /* Garante que o header fique sobre o conteúdo da página */    
+    }
+    
+    .header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px; /* Define a largura máxima */
+    margin: 0 auto; /* Centraliza o container */
+    padding: 0 20px; /* Adiciona algum espaçamento interno */
+    }
+    
+    .logo {
+    font-size: 24px;
+    font-family: 'Old English', serif;
+    color: #FFFFFF;
+    }
+    
+    .nav-menu {
+        margin-left: 20em;
+    display: flex;
+    align-items: center;
+    }
+    
+    .nav-link {
+    color: #FFFFFF;
+    margin: 0 15px;
+    text-decoration: none;
+    font-size: 16px;
+    position: relative;
+    }
+    
+    .nav-link:hover {
+    color: #C0C0C0;
+    }
+    
+    .nav-link::before {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #C0C0C0;
+    opacity: 0;
+    transition: opacity 0.3s;
+    }
+    
+    .nav-link:hover::before {
+    opacity: 1;
+    }
+    
+    .social-icons a {
+    margin-left: 15px;
+    color: #FFFFFF;
+    font-size: 20px;
+    }
+    
+    .social-icons a:hover {
+    color: #C0C0C0;
+    }
