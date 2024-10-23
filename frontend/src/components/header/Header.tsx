@@ -13,7 +13,7 @@ const Header = ({ isOpen, setIsOpen }) => {
                 <div className="logo">
                     <Image src="/images/La_Migra_Ink.png" alt="logo La Migra" width={190} height={50} />
                 </div>
-                <button onClick={() => setIsOpen(!isOpen)} className="md:hidden">
+                <button onClick={() => setIsOpen(!isOpen)}>
                     <svg className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
                     </svg>
