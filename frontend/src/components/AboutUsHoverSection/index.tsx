@@ -1,5 +1,4 @@
 import React from 'react';
-import './AboutUsHoverSection.css';
 
 const HoverSection = () => {
   return (

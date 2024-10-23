@@ -4,23 +4,30 @@ import { FaInstagram, FaFacebookF, FaTwitter } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import ChatPopup from '../components/ChatPopup'; // Importando o ChatPopup
-import Header from '@/components/header';
+import Header from '@/components/header/Header';
 import Parallax from '@/components/parallax';
-import HoverSection from '@/components/hoverSection';
+import HoverSection from '../components/hoverSection';
 import ArtistsSection from '@/components/artistsSection';
 import AboutUsHoverSection from '@/components/AboutUsHoverSection';
 import Footer from '@/components/Footer';
 
 export default function LandingPage() {
   const [showChat, setShowChat] = useState(false); // Estado para controlar a exibição do chat
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div className="bg-black text-white relative overflow-hidden">
-      {/* Triângulos no topo da página */}
-      <div className="absolute top-0 left-0 w-64 h-64 bg-red-600 clip-triangle rotate-45 opacity-60"></div>
-      <div className="absolute top-0 right-0 w-64 h-64 bg-red-600 clip-triangle rotate-45 opacity-60"></div>
+      <Header isOpen={isOpen} setIsOpen={setIsOpen} />
 
-      <Header/>
+      {/* Conteúdo principal da página */}
+      <motion.section className="h-screen flex flex-col justify-center items-center bg-black z-10 relative"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+      >
+        <h1 className="text-6xl font-bold">Arte. Tatuagem. Cultura.</h1>
+      </motion.section>
+
 
       {/* Hero Section */}
       <motion.section
@@ -53,11 +60,11 @@ export default function LandingPage() {
         </motion.button>
       </motion.section>
 
-      <Parallax/>
-      <HoverSection/>
-      <ArtistsSection/>
-      <AboutUsHoverSection/>
-      <Footer/>
+      <Parallax />
+      <HoverSection />
+      <ArtistsSection />
+      <AboutUsHoverSection />
+      <Footer />
 
       {/* About Section */}
       <section id="about" className="py-20 bg-gray-900 text-center">
