@@ -11,11 +11,7 @@ const Header = ({ isOpen, setIsOpen }) => {
     useEffect(() => {
         const handleScroll = () => {
             const scrollTop = window.scrollY; // Posição vertical do scroll
-            if (scrollTop > 0) {
-                setIsScrolled(true);
-            } else {
-                setIsScrolled(false);
-            }
+            setIsScrolled(scrollTop > 0);
         };
 
         window.addEventListener('scroll', handleScroll);
@@ -26,9 +22,22 @@ const Header = ({ isOpen, setIsOpen }) => {
 
     return (
         <div>
-            <header className={`flex items-center justify-between p-5 fixed w-full z-50 transition-colors duration-300 ${isScrolled ? 'bg-zinc-900' : 'bg-transparent'}`}>
+            <header className={`flex items-center justify-between px-5 md:px-10 py-5 fixed w-full z-50 transition-colors duration-300 ${isScrolled ? 'bg-zinc-900' : 'bg-transparent'}`}>
                 <div className="logo">
                     <Image src="/images/La_Migra_Ink.png" alt="logo La Migra" width={190} height={50} />
+                </div>
+                <div className="hidden md:flex space-x-10"> {/* Espaço entre logo e itens */}
+                    {sections.map((section) => (
+                        <a 
+                            key={section} 
+                            href="#" 
+                            className={`relative text-white hover:text-orange-300`}
+                            onClick={() => setActiveSection(section)}
+                        >
+                            {section}
+                            <span className={`absolute left-0 right-0 bottom-0 h-0.5 bg-orange-300 transform scale-x-0 transition-transform duration-300 ${activeSection === section ? 'scale-x-100' : ''}`}></span>
+                        </a>
+                    ))}
                 </div>
                 <button onClick={() => setIsOpen(!isOpen)} className="md:hidden">
                     <svg className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">

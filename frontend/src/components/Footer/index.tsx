@@ -13,47 +13,48 @@ const ContactSection = () => {
 
       <div className="relative z-10 max-w-6xl mx-auto px-4 md:px-10 text-white">
         {/* Título */}
-        <h2 className="text-3xl font-bold text-center mb-4">Siga-nos no Instagram</h2>
+        <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">Siga-nos no Instagram</h2>
         <hr className="border-t-2 border-[#a68d7a] mb-6" /> {/* Linha divisória */}
 
         {/* Informações de contato */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="flex items-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-center md:text-left">
+          <div className="flex justify-center md:justify-start items-center">
             <FaInstagram className="mr-2 text-[#a68d7a]" /> {/* Ícone do Instagram */}
             <span>Onde Estamos</span>
           </div>
-          <div className="flex items-center justify-end">
+          <div className="flex justify-center md:justify-end items-center">
             <span>Avenida Ibirapuera, 3478</span>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="flex items-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-center md:text-left mt-4">
+          <div className="flex justify-center md:justify-start items-center">
             <span>Moema, São Paulo - SP</span>
           </div>
-          <div className="flex items-center justify-end">
+          <div className="flex justify-center md:justify-end items-center">
             <FaFacebook className="mr-2 text-[#a68d7a]" /> {/* Ícone do Facebook */}
             <span>(11) 94486-3323</span>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="flex items-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-center md:text-left mt-4">
+          <div className="flex justify-center md:justify-start items-center">
             <span>CEP 04028-003</span>
           </div>
-          <div className="flex items-center justify-end">
+          <div className="flex justify-center md:justify-end items-center">
             <span>contato@ledstattoo.com.br</span>
-          </div>
-          <div className="flex justify-center mt-4">
-            <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" className="mx-2">
-              <FaInstagram className="text-3xl text-[#a68d7a]" /> {/* Ícone clicável do Instagram */}
-            </a>
-            <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" className="mx-2">
-              <FaFacebook className="text-3xl text-[#a68d7a]" /> {/* Ícone clicável do Facebook */}
-            </a>
           </div>
         </div>
 
+        {/* Ícones de redes sociais */}
+        <div className="flex justify-center mt-6">
+          <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" className="mx-2">
+            <FaInstagram className="text-3xl text-[#a68d7a]" /> {/* Ícone clicável do Instagram */}
+          </a>
+          <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" className="mx-2">
+            <FaFacebook className="text-3xl text-[#a68d7a]" /> {/* Ícone clicável do Facebook */}
+          </a>
+        </div>
       </div>
     </section>
   );
