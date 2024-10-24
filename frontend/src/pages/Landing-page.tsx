@@ -10,6 +10,7 @@ import HoverSection from '../components/hoverSection';
 import ArtistsSection from '@/components/artistsSection';
 import AboutUsHoverSection from '@/components/AboutUsHoverSection';
 import Footer from '@/components/Footer';
+import HeroSection from '@/components/HeroSection';
 
 export default function LandingPage() {
   const [showChat, setShowChat] = useState(false); // Estado para controlar a exibição do chat
@@ -18,19 +19,20 @@ export default function LandingPage() {
   return (
     <div className="bg-black text-white relative overflow-hidden">
       <Header isOpen={isOpen} setIsOpen={setIsOpen} />
+      <HeroSection/>
 
       {/* Conteúdo principal da página */}
-      <motion.section className="h-screen flex flex-col justify-center items-center bg-black z-10 relative"
+      {/* <motion.section className="h-screen flex flex-col justify-center items-center bg-black z-10 relative"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
       >
         <h1 className="text-6xl font-bold">Arte. Tatuagem. Cultura.</h1>
-      </motion.section>
+      </motion.section> */}
 
 
       {/* Hero Section */}
-      <motion.section
+      {/* <motion.section
         className="h-screen flex flex-col justify-center items-center bg-black z-10 relative"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -58,7 +60,7 @@ export default function LandingPage() {
         >
           Agende sua consulta
         </motion.button>
-      </motion.section>
+      </motion.section> */}
 
       <Parallax />
       <HoverSection />
@@ -144,7 +146,9 @@ export default function LandingPage() {
       </button>
 
       {/* Chat Popup */}
-      {showChat && <ChatPopup />}
+      {showChat && <ChatPopup onClose={function (): void {
+        throw new Error('Function not implemented.');
+      } } />}
     </div>
   );
 }
