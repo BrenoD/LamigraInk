@@ -73,7 +73,7 @@ const ChatPopup: React.FC<ChatPopupProps> = ({ roomId, userType, onClose }) => {
   };
 
   return (
-    <div className="fixed bottom-20 right-5 bg-gray-800 text-white p-4 rounded-lg shadow-lg w-80">
+    <div className="fixed z-50 bottom-20 right-5 bg-gray-800 text-white p-4 rounded-lg shadow-lg w-80">
       <div className="flex justify-between items-center">
         <h2 className="text-lg font-bold">Chat</h2>
         <button className="text-red-500" onClick={onClose}>
