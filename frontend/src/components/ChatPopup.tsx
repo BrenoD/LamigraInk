@@ -1,83 +1,105 @@
-// components/ChatPopup.tsx
 import { useEffect, useState } from 'react';
 
 interface Message {
-  roomId: number;
+  roomId: string;
   senderId: number;
   content: string;
+  senderType: 'client' | 'attendant';
 }
 
 interface ChatPopupProps {
-  onClose: () => void; // Função que será chamada para fechar o popup
+  roomId: string;
+  userType: 'client' | 'attendant';
+  onClose: () => void;
 }
 
-const ChatPopup: React.FC<ChatPopupProps> = ({ onClose }) => {
-  const [messages, setMessages] = useState<Message[]>([]); // Estado para mensagens
-  const [message, setMessage] = useState<string>(''); // Estado para a nova mensagem
-  const [socket, setSocket] = useState<WebSocket | null>(null); // Estado para WebSocket
-  const [roomId, setRoomId] = useState<number | null>(null); // Estado para o ID da sala
+const ChatPopup: React.FC<ChatPopupProps> = ({ roomId, userType, onClose }) => {
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [message, setMessage] = useState<string>('');
+  const [socket, setSocket] = useState<WebSocket | null>(null);
 
   useEffect(() => {
-    // Conectando ao WebSocket
-    const ws = new WebSocket('ws://localhost:8080/ws');
-    setSocket(ws);
+    if (roomId) {
+      const ws = new WebSocket(`ws://localhost:8080/ws?type=${userType}&room=${roomId}`);
 
-    ws.onmessage = (event) => {
-      const newMessage: Message = JSON.parse(event.data); // Parse da nova mensagem
-      setMessages((prevMessages) => [...prevMessages, newMessage]); // Atualiza as mensagens
-    };
+      ws.onopen = () => {
+        console.log("Conexão WebSocket estabelecida. Room ID:", roomId, "User Type:", userType);
+      };
 
-    // Limpar a conexão ao desmontar o componente
-    return () => {
-      ws.close();
-    };
-  }, []);
+      ws.onmessage = (event) => {
+        const newMessage: Message = JSON.parse(event.data);
+        console.log("Mensagem recebida:", newMessage); // Log da mensagem recebida
+        setMessages((prevMessages) => [...prevMessages, newMessage]);
+      };
 
-  const createChat = async () => {
-    // Lógica para criar sala e usuário no backend
-    const response = await fetch('http://localhost:8080/create-chat', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        userId: 1, // ID do atendente ou cliente, ajuste conforme necessário
-      }),
-    });
-    const data = await response.json();
-    if (response.ok) {
-      setRoomId(data.roomId); // Armazena o RoomID recebido
-    } else {
-      console.error('Erro ao criar sala:', data);
+      ws.onerror = (error) => {
+        console.error("Erro na conexão WebSocket:", error);
+      };
+
+      ws.onclose = () => {
+        console.log("Conexão WebSocket fechada.");
+      };
+
+      setSocket(ws);
+
+      return () => {
+        ws.close();
+      };
     }
-  };
+  }, [roomId, userType]);
 
   const sendMessage = () => {
-    if (message.trim() && socket && roomId !== null) {
-      socket.send(JSON.stringify({
-        roomId: roomId, // Enviar roomId da sala criada
-        senderId: 1,    // ID do atendente ou cliente, ajuste conforme necessário
+    if (message.trim() && socket && socket.readyState === WebSocket.OPEN) {
+      const msg = {
+        roomId,
+        senderId: userType === 'client' ? 1 : 2,
         content: message,
-      }));
-      setMessage(''); // Limpa o campo de mensagem
+        senderType: userType,
+      };
+      
+      console.log("Enviando mensagem:", msg); // Log da mensagem a ser enviada
+      socket.send(JSON.stringify(msg));
+
+      // Adiciona a mensagem ao estado local imediatamente após o envio
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        msg
+      ]);
+
+      setMessage(''); // Limpa o campo de input
+    } else {
+      console.error("Erro ao enviar mensagem: WebSocket não está conectado.");
     }
   };
-
-  useEffect(() => {
-    createChat(); // Criar sala quando o componente é montado
-  }, []);
 
   return (
     <div className="fixed bottom-20 right-5 bg-gray-800 text-white p-4 rounded-lg shadow-lg w-80">
       <div className="flex justify-between items-center">
         <h2 className="text-lg font-bold">Chat</h2>
-        <button className="text-red-500" onClick={onClose}>✖</button>
+        <button className="text-red-500" onClick={onClose}>
+          ✖
+        </button>
       </div>
       <div className="mt-2 h-48 overflow-y-auto bg-gray-900 p-2 rounded">
         {messages.length > 0 ? (
           messages.map((msg, idx) => (
-            <div key={idx} className="mb-2">
-              <span className="block bg-green-500 rounded p-1">{msg.content}</span>
+            <div
+              key={idx}
+              className={`mb-2 ${msg.senderType === userType ? 'text-right' : 'text-left'}`}
+            >
+              <span
+                className={`block p-2 rounded-lg ${
+                  msg.senderType === 'client' ? 'bg-green-500' : 'bg-blue-500'
+                }`}
+              >
+                <strong>
+                  {msg.senderType === 'client'
+                    ? userType === 'client' ? 'Você' : 'Cliente'
+                    : userType === 'attendant' ? 'Você' : 'Atendente'}
+                  :
+                </strong>{' '}
+                {msg.content}
+              </span>
             </div>
           ))
         ) : (

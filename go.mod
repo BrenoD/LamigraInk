@@ -5,6 +5,7 @@ go 1.22.6
 require github.com/gin-gonic/gin v1.10.0
 
 require (
+	github.com/gin-contrib/cors v1.7.2 // indirect
 	github.com/gorilla/websocket v1.5.3 // indirect
 	github.com/lib/pq v1.10.9 // indirect
 )

@@ -2,7 +2,7 @@
 
 import { FaInstagram, FaFacebookF, FaTwitter } from 'react-icons/fa';
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ChatPopup from '../components/ChatPopup'; // Importando o ChatPopup
 import Header from '@/components/header/Header';
 import Parallax from '@/components/parallax';
@@ -11,9 +11,32 @@ import ArtistsSection from '@/components/artistsSection';
 import AboutUsHoverSection from '@/components/AboutUsHoverSection';
 import Footer from '@/components/Footer';
 
+// Função para gerar um Room ID aleatório
+const generateRoomId = () => {
+  return Math.random().toString(36).substring(2, 10); // Gera um Room ID único
+};
+
 export default function LandingPage() {
   const [showChat, setShowChat] = useState(false); // Estado para controlar a exibição do chat
+  const [roomId, setRoomId] = useState<string>(''); // Estado para armazenar o Room ID
   const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    if (showChat && !roomId) {
+      const newRoomId = generateRoomId();
+      setRoomId(newRoomId);
+  
+      // Registra o chat como ativo no backend
+      fetch('http://localhost:8080/active-chats', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ roomId: newRoomId }),
+      }).catch(error => console.error("Erro ao registrar chat ativo:", error));
+    }
+  }, [showChat, roomId]);
+  
 
   return (
     <div className="bg-black text-white relative overflow-hidden">
@@ -27,7 +50,6 @@ export default function LandingPage() {
       >
         <h1 className="text-6xl font-bold">Arte. Tatuagem. Cultura.</h1>
       </motion.section>
-
 
       {/* Hero Section */}
       <motion.section
@@ -135,7 +157,6 @@ export default function LandingPage() {
         © {new Date().getFullYear()} Led's Tattoo. Todos os direitos reservados.
       </footer>
 
-      {/* Botão de Chat para abrir o popup */}
       <button
         onClick={() => setShowChat(!showChat)}
         className="fixed bottom-5 right-5 bg-green-500 text-white p-3 rounded-full shadow-lg"
@@ -143,8 +164,9 @@ export default function LandingPage() {
         Chat
       </button>
 
-      {/* Chat Popup */}
-      {showChat && <ChatPopup />}
+      {showChat && roomId && (
+        <ChatPopup roomId={roomId} userType="client" onClose={() => setShowChat(false)} />
+      )}
     </div>
   );
 }
