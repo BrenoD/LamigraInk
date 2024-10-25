@@ -1,11 +1,13 @@
 import Index from "@/pages/Landing-page"
-import Dashboard from "@/pages/Dashboard";
+import dynamic from 'next/dynamic';
+
+const Dashboard = dynamic(() => import('../pages/Dashboard'), { ssr: false });
 
 export default function Home() {
   return (
-    <div>
+    <main>
       <Index/>
-      <Dashboard/>
-    </div>
+      <Dashboard />
+    </main>
   );
 }

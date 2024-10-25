@@ -1,86 +1,90 @@
 "use client";
 
-import { useState, useRef } from 'react';
+import { motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
 import ChatPopup from '../components/ChatPopup';
-import Header from '../components/Header/Header';
-import HeroSection from '../components/HeroSection';
+
 import Parallax from '../components/Parallax';
 import HoverSection from '../components/HoverSection';
 import ArtistsSection from '../components/ArtistsSection';
+
 import Footer from '../components/Footer';
-import YouTubeSection from '../components/YouTubeSection';
-import AftercareSection from '../components/AftercareSection';
-import ImageCarousel from '../components/ImageCarousel';
+import Header from '../components/Header/Header';
+import HeroSection from '@/components/HeroSection';
+import ImageCarousel from '@/components/ImageCarousel';
+import YouTubeSection from '@/components/YouTubeSection';
 import BookingFeeSection from '@/components/BookingFeeSection';
 
-const backgroundStyle = {
-  backgroundImage: "url('https://ledstattoo.com.br/templates/yootheme/cache/bg-01-d805f7dc.webp')",
-  backgroundSize: 'cover',
-  backgroundPosition: 'center',
-  backgroundRepeat: 'no-repeat',
-  backgroundAttachment: 'fixed',
+// Array de imagens para o carrossel
+const carouselImages = [
+  'https://t4.ftcdn.net/jpg/07/32/21/35/360_F_732213522_Od8FD6XBPgYmHKtJByVoJaiL8miY2QoN.jpg',
+  'https://t4.ftcdn.net/jpg/07/32/21/35/360_F_732213522_Od8FD6XBPgYmHKtJByVoJaiL8miY2QoN.jpg',
+  'https://t4.ftcdn.net/jpg/07/32/21/35/360_F_732213522_Od8FD6XBPgYmHKtJByVoJaiL8miY2QoN.jpg',
+  'https://t4.ftcdn.net/jpg/07/32/21/35/360_F_732213522_Od8FD6XBPgYmHKtJByVoJaiL8miY2QoN.jpg',
+  'https://t4.ftcdn.net/jpg/07/32/21/35/360_F_732213522_Od8FD6XBPgYmHKtJByVoJaiL8miY2QoN.jpg',
+];
+
+// Função para gerar um Room ID aleatório
+const generateRoomId = () => {
+  return Math.random().toString(36).substring(2, 10); // Gera um Room ID único
 };
 
 export default function LandingPage() {
-  const [showChat, setShowChat] = useState(false);
+  const [showChat, setShowChat] = useState(false); // Estado para controlar a exibição do chat
+  const [roomId, setRoomId] = useState<string>(''); // Estado para armazenar o Room ID
   const [isOpen, setIsOpen] = useState(false);
 
-  const galleryRef = useRef<HTMLDivElement>(null);
-  const youtubeRef = useRef<HTMLDivElement>(null);
-  const aftercareRef = useRef<HTMLDivElement>(null);
-  const placementRef = useRef<HTMLDivElement>(null);
-  const bookingRef = useRef<HTMLDivElement>(null);
-  const giftCardsRef = useRef<HTMLDivElement>(null);
-
-  const scrollToSection = (ref: React.RefObject<HTMLDivElement>) => {
-    if (ref.current) {
-      ref.current.scrollIntoView({ behavior: 'smooth' });
+  useEffect(() => {
+    if (showChat && !roomId) {
+      const newRoomId = generateRoomId();
+      setRoomId(newRoomId);
+  
+      // Registra o chat como ativo no backend
+      fetch('http://localhost:8080/active-chats', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ roomId: newRoomId }),
+      }).catch(error => console.error("Erro ao registrar chat ativo:", error));
     }
-  };
-
-  const carouselImages = [
-    'https://as2.ftcdn.net/v2/jpg/06/64/80/63/1000_F_664806390_BZz3oC5X2GM0epBWLwSxhdfpYXWMJ3Kg.jpg',
-    'https://as1.ftcdn.net/v2/jpg/06/27/73/36/1000_F_627733695_76OIk9H1hlmVXqQw6DJKWwllo2Apn2bH.jpg',
-    'https://as1.ftcdn.net/v2/jpg/07/93/59/78/1000_F_793597866_0wxhOMfaNXFrHggscUcdl8q36i672NSq.jpg',
-    // Adicione mais URLs de imagens conforme necessário
-  ];
+  }, [showChat, roomId]);
+  
 
   return (
-    <div className="bg-black text-white relative" style={backgroundStyle}>
-      <div className="absolute inset-0 bg-black opacity-80 z-0"></div>
-      <div className="relative z-10">
-        <Header 
-          isOpen={isOpen} 
-          setIsOpen={setIsOpen}
-          scrollToSection={scrollToSection}
-          refs={{
-            gallery: galleryRef,
-            youtube: youtubeRef,
-            aftercare: aftercareRef,
-            placement: placementRef,
-            booking: bookingRef,
-            giftCards: giftCardsRef
-          }}
-        />
-        <HeroSection />
-        <Parallax />
-        <HoverSection />
-        <ArtistsSection />
-        <YouTubeSection />
-        <AftercareSection />
-        <ImageCarousel images={carouselImages} interval={3000} />
-        <BookingFeeSection />
-        <Footer />
+    <div className="bg-black text-white relative overflow-hidden">
+      <Header isOpen={isOpen} setIsOpen={setIsOpen} />
 
-        <button
-          onClick={() => setShowChat(!showChat)}
-          className="fixed bottom-5 right-5 bg-green-500 text-white p-3 rounded-full shadow-lg z-50"
-        >
-          Chat
-        </button>
+      {/* Conteúdo principal da página
+      <motion.section className="h-screen flex flex-col justify-center items-center bg-black z-10 relative"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+      >
+        <h1 className="text-6xl font-bold">Arte. Tatuagem. Cultura.</h1>
+      </motion.section> */}
 
-        {showChat && <ChatPopup onClose={() => setShowChat(false)} />}
-      </div>
+      
+      <HeroSection />
+      <Parallax />
+      <HoverSection />
+      <ArtistsSection />
+      <YouTubeSection />
+      <ImageCarousel images={carouselImages} />
+      <BookingFeeSection />
+      <Footer />
+
+      {/* Botão de Chat */}
+      <button
+        onClick={() => setShowChat(!showChat)}
+        className="fixed bottom-5 z-50 right-5 bg-green-500 text-white p-3 rounded-full shadow-lg"
+      >
+        Chat
+      </button>
+
+      {showChat && roomId && (
+        <ChatPopup roomId={roomId} userType="client" onClose={() => setShowChat(false)} />
+      )}
     </div>
   );
 }
