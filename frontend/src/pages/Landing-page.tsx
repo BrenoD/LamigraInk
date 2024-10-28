@@ -26,7 +26,7 @@ export default function LandingPage() {
     if (showChat && !roomId) {
       const newRoomId = generateRoomId();
       setRoomId(newRoomId);
-  
+
       // Registra o chat como ativo no backend
       fetch('http://localhost:8080/active-chats', {
         method: 'POST',
@@ -37,7 +37,7 @@ export default function LandingPage() {
       }).catch(error => console.error("Erro ao registrar chat ativo:", error));
     }
   }, [showChat, roomId]);
-  
+
 
   return (
     <div className="bg-black text-white relative overflow-hidden">
@@ -52,20 +52,33 @@ export default function LandingPage() {
         <h1 className="text-6xl font-bold">Arte. Tatuagem. Cultura.</h1>
       </motion.section> */}
 
+      <video
+        autoPlay
+        muted
+        loop
+        id="background-video"
+        className="absolute top-0 left-0 w-full h-screen sm:h-auto object-cover lg:object-contain z-0 pointer-events-none"
+      >
+        <source src="/vitrine-video.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+
+
+
       {/* Hero Section */}
       <motion.section
         className="h-screen flex flex-col justify-center items-center bg-black z-10 relative"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 1 }}
+        transition={{ duration: 4 }}
       >
         <motion.h1
-          className="text-6xl font-extrabold text-center mb-4"
+          className="text-6xl font-bold text-center mb-4"
           initial={{ y: -100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.8 }}
         >
-          Arte. Tatuagem. Cultura.
+          PIONEERING AND QUALITY IN EVERY STRATEGY.
         </motion.h1>
         <motion.p
           className="text-xl text-center mb-8"
@@ -73,6 +86,7 @@ export default function LandingPage() {
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 1 }}
         >
+
           Transformando suas ideias em arte desde 2000.
         </motion.p>
         <motion.button

@@ -102,7 +102,7 @@ const Dashboard = () => {
       </div>
 
       {selectedChat && (
-        <div className="fixed inset-0 z-50 flex justify-center items-center bg-black bg-opacity-75">
+        <div className="fixed z-50 bottom-20 right-5 bg-gray-800 text-white p-4 rounded-lg shadow-lg w-80">
           <ChatPopup roomId={selectedChat} userType="attendant" onClose={() => setSelectedChat(null)} />
         </div>
       )}
