@@ -1,43 +1,60 @@
 export interface Artist {
   id: string;
   name: string;
-  profileImage: string;
   description: string;
+  profileImage: string;
   gallery: string[];
+  experience?: string;
+  specialities: string[];
 }
 
 export const artistsData: Artist[] = [
   {
     id: 'moises-alves',
-    name: 'Moises Alves',
+    name: 'Moises',
+    description: 'Artist specialising in realism and blackwork...',
     profileImage: '/artists/moises-perfil-400px.webp',
-    description: 'I have been a tattoo artist for 20 years, learning different ways to bring your dream to reality. I am always available to talk with the client, before starting the project.',
-    gallery: [
-      '/artists/gallery/Moises/file.mp4',
-      '/artists/joao-work-2.jpg',
-      '/artists/joao-work-3.jpg',
-    ],
+    gallery: [],
+    experience: '10',
+    specialities: ['Blackwork', 'Realism', 'Oriental']
   },
   {
-    id: 'maria-santos',
-    name: 'Maria Santos',
-    profileImage: '/artists/maria-profile.jpg',
-    description: 'Artista especializada em aquarela e designs minimalistas. Premiada internacionalmente.',
-    gallery: [
-      '/artists/maria-work-1.jpg',
-      '/artists/maria-work-2.jpg',
-      '/artists/maria-work-3.jpg',
-    ],
+    id: 'megan',
+    name: 'Megan',
+    profileImage: '/artists/megan.webp',
+    description: 'Artist specialising in watercolour and minimalist designs. Internationally awarded.',
+    gallery: [], // Will be populated dynamically
+    experience: '10',
+    specialities: ['Watercolour', 'Minimalist']
   },
   {
-    id: 'pedro-oliveira',
-    name: 'Pedro Oliveira',
-    profileImage: '/artists/pedro-profile.jpg',
-    description: 'Mestre em tatuagens orientais e designs geométricos complexos.',
-    gallery: [
-      '/artists/pedro-work-1.jpg',
-      '/artists/pedro-work-2.jpg',
-      '/artists/pedro-work-3.jpg',
-    ],
+    id: 'vini-capobianco',
+    name: 'Vini Capobianco',
+    profileImage: '/artists/vini.webp',
+    description: 'Master in oriental tattoos and complex geometric designs.',
+    gallery: [], // Will be populated dynamically
+    experience: '10',
+    specialities: ['Oriental', 'Geometric']
   },
 ];
+
+// Function to load gallery dynamically
+export async function loadArtistGallery(artistId: string) {
+  try {
+    const response = await fetch(`/api/gallery?artist=${artistId}`);
+    if (!response.ok) {
+      throw new Error('Failed to load gallery');
+    }
+    const gallery = await response.json();
+    
+    // Updates the artist's gallery
+    const artist = artistsData.find(a => a.id === artistId);
+    if (artist) {
+      artist.gallery = gallery;
+    }
+    return gallery;
+  } catch (error) {
+    console.error('Error loading gallery:', error);
+    return [];
+  }
+}

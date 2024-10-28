@@ -3,7 +3,7 @@ import { motion, useAnimation } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import './styles.css';
 
-interface AftercareSectionProps {
+interface AftercareSectionProps extends Record<string, unknown> {
   // Mesmo que não tenha props no momento, é melhor usar uma interface
   // para futuras extensões
 }

@@ -1,0 +1,8 @@
+.fade-element {
+  will-change: transform, opacity;
+}
+
+.fade-element.fade-in {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+} 
