@@ -8,9 +8,14 @@ import (
 
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq" // Importa o driver PostgreSQL
+    "github.com/stripe/stripe-go/v72"
 )
 
 var DB *sql.DB
+
+func InitStripe() {
+    stripe.Key = os.Getenv("STRIPE_SECRET_KEY")
+}
 
 // Função para abrir a conexão com o banco de dados
 func OpenConn() error {

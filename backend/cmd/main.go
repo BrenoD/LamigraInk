@@ -11,6 +11,9 @@ import (
 )
 
 func main() {
+
+    config.InitStripe()
+
     // Abre a conexão com o banco de dados
     if err := config.OpenConn(); err != nil {
         log.Fatalf("Erro ao abrir a conexão com o banco de dados: %v", err)

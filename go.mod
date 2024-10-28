@@ -8,6 +8,7 @@ require (
 	github.com/gin-contrib/cors v1.7.2 // indirect
 	github.com/gorilla/websocket v1.5.3 // indirect
 	github.com/lib/pq v1.10.9 // indirect
+	github.com/stripe/stripe-go/v72 v72.122.0 // indirect
 )
 
 require (
