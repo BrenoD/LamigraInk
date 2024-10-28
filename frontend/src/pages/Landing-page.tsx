@@ -8,11 +8,11 @@ import Parallax from '../components/Parallax';
 import HoverSection from '../components/HoverSection';
 import ArtistsSection from '../components/ArtistsSection';
 
-import Footer from '../components/Footer';
+import Footer from '@/components/Footer';
 import Header from '../components/Header/Header';
 import HeroSection from '@/components/HeroSection';
 import ImageCarousel from '@/components/ImageCarousel';
-import YouTubeSection from '@/components/YouTubeSection';
+import YouTubeSection from '../components/YouTubeSection/index';
 import BookingFeeSection from '@/components/BookingFeeSection';
 
 // Array de imagens para o carrossel

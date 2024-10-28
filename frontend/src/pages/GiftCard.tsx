@@ -1,16 +1,33 @@
 import React, { useState } from "react";
+import { useRouter } from "next/router";
 import "./Dashboard.css";
 
 const GiftCardPage: React.FC = () => {
-  const [amount, setAmount] = useState<number>(50);
-  const [recipientEmail, setRecipientEmail] = useState<string>("");
-  const [recipientName, setRecipientName] = useState<string>(""); // Novo campo para o nome
-  const [message, setMessage] = useState<string>("");
+  const [amount, setAmount] = useState<number>(50); // Valor inicial padrão
+  const [recipientEmail, setRecipientEmail] = useState<string>(""); // Email do destinatário
+  const [recipientName, setRecipientName] = useState<string>(""); // Nome do destinatário
+  const [message, setMessage] = useState<string>(""); // Mensagem personalizada
+  const router = useRouter(); // Hook do Next.js para navegação
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Adicione a lógica de envio do gift card aqui
-    console.log({ amount, recipientEmail, recipientName, message });
+
+    // Verificar se o nome e email estão preenchidos
+    if (!recipientEmail || !recipientName) {
+      alert("Preencha o nome e o email do destinatário.");
+      return;
+    }
+
+    // Redireciona para a página de checkout com os parâmetros via query string
+    router.push({
+      pathname: "./Checkout", // O caminho da página de checkout
+      query: {
+        amount: amount, // Valor selecionado
+        recipientName: recipientName, // Nome do destinatário
+        recipientEmail: recipientEmail, // Email do destinatário
+        message: message // Mensagem opcional
+      }
+    });
   };
 
   return (
@@ -54,7 +71,7 @@ const GiftCardPage: React.FC = () => {
             </label>
             <select
               value={amount}
-              onChange={(e) => setAmount(Number(e.target.value))}
+              onChange={(e) => setAmount(Number(e.target.value))} // Garante que o amount seja um número
               className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
             >
               <option value={25}>$25</option>
@@ -80,7 +97,7 @@ const GiftCardPage: React.FC = () => {
             type="submit"
             className="w-full bg-indigo-600 text-white p-2 rounded-md font-semibold hover:bg-indigo-700 transition"
           >
-            Purchase Gift Card
+            Proceed to Checkout
           </button>
         </form>
       </div>
