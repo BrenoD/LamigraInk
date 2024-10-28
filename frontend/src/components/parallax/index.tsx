@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import './styles.css';
 
 const ParallaxSection = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -69,34 +70,40 @@ const ParallaxSection = () => {
   return (
     <section 
       ref={sectionRef}
-      className="relative w-full h-screen bg-cover bg-fixed bg-top" 
-      style={{ backgroundImage: `url('https://ledstattoo.com.br/templates/yootheme/cache/sobre-home-5d9c8c37.webp')` }}
+      className="parallax-section font-sans"
     >
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-black opacity-50"></div>
+      <div className="overlay"></div>
 
-      {/* Text and Button - Aligned Left */}
-      <div className="relative z-10 flex items-center justify-center md:justify-end h-full px-4 md:px-10">
-        <div className="text-white max-w-lg text-center md:text-left mr-10">
-          <h2 className={`text-4xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6 ${getAnimationClass(1)}`}>
-            Making History in the Tattoo World
+      <div className="content-wrapper">
+        <div className="text-container">
+          <h2 className={`heading ${getAnimationClass(1)}`}>
+            <span className="desktop-text">Making History in the Art of Tattooing</span>
+            <span className="mobile-text">Art of Tattooing</span>
           </h2>
-          <p className={`text-lg md:text-xl mb-4 md:mb-6 ${getAnimationClass(2)}`}>
-            The largest tattoo studio in Latin America, with international recognition, dozens of awards, and a specialized team.
+          <p className={`description ${getAnimationClass(2)}`}>
+            <span className="desktop-text">
+              The largest tattoo studio in Latin America, with international recognition, 
+              dozens of awards and a specialised team.
+            </span>
+            <span className="mobile-text">
+              Latin America's largest award-winning tattoo studio
+            </span>
           </p>
-          <p className={`text-lg md:text-xl mb-6 ${getAnimationClass(3)}`}>
-            Safe and responsible work in applying piercings, laser tattoo removal, and creating works of art on your skin.
+          <p className={`description ${getAnimationClass(3)}`}>
+            <span className="desktop-text">
+              Safe and professional work in piercing application, 
+              laser tattoo removal and creating artwork on your skin.
+            </span>
+            <span className="mobile-text">
+              Professional tattoos, piercings & laser removal
+            </span>
           </p>
           <a
-            className={`inline-block px-6 py-3 rounded-sm ${getAnimationClass(4)}`}
+            className={`cta-button ${getAnimationClass(4)}`}
             href="/studio"
-            style={{
-              backgroundColor: '#a68d7a',
-              color: '#fff',
-              borderColor: 'transparent',
-            }}
           >
-            Discover the Studio
+            <span className="desktop-text">Discover Our Studio</span>
+            <span className="mobile-text">View Studio</span>
           </a>
         </div>
       </div>

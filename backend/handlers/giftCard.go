@@ -1,12 +1,13 @@
 package handlers
 
 import (
-    "LaMigraInk/backend/models"
-    "fmt"
-    "net/http"
+	"LaMigraInk/backend/models"
+	"encoding/json"
+	"fmt"
+	"net/http"
 
-    "github.com/stripe/stripe-go/v72"
-    "github.com/stripe/stripe-go/v72/paymentintent"
+	"github.com/stripe/stripe-go/v72"
+	"github.com/stripe/stripe-go/v72/paymentintent"
 )
 
 func CreatePaymentIntent(w http.ResponseWriter, r *http.Request) {

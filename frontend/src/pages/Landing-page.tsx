@@ -14,6 +14,7 @@ import HeroSection from '@/components/HeroSection';
 import ImageCarousel from '@/components/ImageCarousel';
 import YouTubeSection from '@/components/YouTubeSection';
 import BookingFeeSection from '@/components/BookingFeeSection';
+import AftercareSection from '@/components/AftercareSection';
 
 // Array de imagens para o carrossel
 const carouselImages = [
@@ -77,42 +78,14 @@ export default function LandingPage() {
 
 
 
-      {/* Hero Section */}
-      <motion.section
-        className="h-screen flex flex-col justify-center items-center bg-black z-10 relative"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1 }}
-      >
-        <motion.h1
-          className="text-6xl font-extrabold text-center mb-4"
-          initial={{ y: -100, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.8 }}
-        >
-          Arte. Tatuagem. Cultura.
-        </motion.h1>
-        <motion.p
-          className="text-xl text-center mb-8"
-          initial={{ y: 100, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 1 }}
-        >
-          Transformando suas ideias em arte desde 2000.
-        </motion.p>
-        <motion.button
-          className="bg-red-600 hover:bg-red-700 text-white py-3 px-6 rounded-full"
-          whileHover={{ scale: 1.1 }}
-        >
-          Agende sua consulta
-        </motion.button>
-      </motion.section>
-
+     
+      <HeroSection />
       <Parallax />
       <HoverSection />
       <ArtistsSection />
       <YouTubeSection />
       <ImageCarousel images={carouselImages} />
+      <AftercareSection />
       <BookingFeeSection />
       <Footer />
 
