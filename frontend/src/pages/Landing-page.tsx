@@ -1,16 +1,28 @@
 "use client";
 
-import { FaInstagram, FaFacebookF, FaTwitter } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
-import ChatPopup from '../components/ChatPopup'; // Importando o ChatPopup
-import Header from '@/components/header/Header';
-import Parallax from '@/components/parallax';
-import HoverSection from '../components/hoverSection';
-import ArtistsSection from '@/components/artistsSection';
-import AboutUsHoverSection from '@/components/AboutUsHoverSection';
-import Footer from '@/components/Footer';
+import ChatPopup from '../components/ChatPopup';
+
+import Parallax from '../components/Parallax';
+import HoverSection from '../components/HoverSection';
+import ArtistsSection from '../components/ArtistsSection';
+
+import Footer from '../components/Footer';
+import Header from '../components/Header/Header';
 import HeroSection from '@/components/HeroSection';
+import ImageCarousel from '@/components/ImageCarousel';
+import YouTubeSection from '@/components/YouTubeSection';
+import BookingFeeSection from '@/components/BookingFeeSection';
+
+// Array de imagens para o carrossel
+const carouselImages = [
+  'https://t4.ftcdn.net/jpg/07/32/21/35/360_F_732213522_Od8FD6XBPgYmHKtJByVoJaiL8miY2QoN.jpg',
+  'https://t4.ftcdn.net/jpg/07/32/21/35/360_F_732213522_Od8FD6XBPgYmHKtJByVoJaiL8miY2QoN.jpg',
+  'https://t4.ftcdn.net/jpg/07/32/21/35/360_F_732213522_Od8FD6XBPgYmHKtJByVoJaiL8miY2QoN.jpg',
+  'https://t4.ftcdn.net/jpg/07/32/21/35/360_F_732213522_Od8FD6XBPgYmHKtJByVoJaiL8miY2QoN.jpg',
+  'https://t4.ftcdn.net/jpg/07/32/21/35/360_F_732213522_Od8FD6XBPgYmHKtJByVoJaiL8miY2QoN.jpg',
+];
 
 // Função para gerar um Room ID aleatório
 const generateRoomId = () => {
@@ -70,15 +82,15 @@ export default function LandingPage() {
         className="h-screen flex flex-col justify-center items-center bg-black z-10 relative"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 4 }}
+        transition={{ duration: 1 }}
       >
         <motion.h1
-          className="text-6xl font-bold text-center mb-4"
+          className="text-6xl font-extrabold text-center mb-4"
           initial={{ y: -100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.8 }}
         >
-          PIONEERING AND QUALITY IN EVERY STRATEGY.
+          Arte. Tatuagem. Cultura.
         </motion.h1>
         <motion.p
           className="text-xl text-center mb-8"
@@ -86,7 +98,6 @@ export default function LandingPage() {
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 1 }}
         >
-
           Transformando suas ideias em arte desde 2000.
         </motion.p>
         <motion.button
@@ -100,7 +111,9 @@ export default function LandingPage() {
       <Parallax />
       <HoverSection />
       <ArtistsSection />
-      <AboutUsHoverSection />
+      <YouTubeSection />
+      <ImageCarousel images={carouselImages} />
+      <BookingFeeSection />
       <Footer />
 
       {/* Botão de Chat */}
