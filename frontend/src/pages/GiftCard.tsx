@@ -11,7 +11,7 @@ const GiftCardPage: React.FC = () => {
     e.preventDefault();
 
     if (!giftCardData.recipientEmail || !giftCardData.recipientName) {
-      alert("Preencha o nome e o email do destinatário.");
+      alert("Please fill in the recipient's name and email.");
       return;
     }
 
@@ -27,7 +27,7 @@ const GiftCardPage: React.FC = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Nome do Destinatário
+              Recipient&apos;s Name
             </label>
             <input
               type="text"
@@ -38,7 +38,7 @@ const GiftCardPage: React.FC = () => {
               })}
               required
               className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-              placeholder="Digite o nome do destinatário"
+              placeholder="Enter recipient's name"
             />
           </div>
 

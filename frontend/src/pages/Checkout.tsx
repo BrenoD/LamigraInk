@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements, useStripe, useElements, CardNumberElement, CardCvcElement, CardExpiryElement } from "@stripe/react-stripe-js";
 import { useRouter } from "next/router";
@@ -13,22 +13,22 @@ const CheckoutForm: React.FC = () => {
   const elements = useElements();
   const router = useRouter();
   const { giftCardData } = useGiftCard();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
 
     try {
       if (!stripe || !elements) {
         return;
       }
 
-      // Get card element
       const cardNumberElement = elements.getElement(CardNumberElement);
       if (!cardNumberElement) {
-        throw new Error("Elementos do cartão não encontrados");
+        throw new Error("Card elements not found");
       }
 
-      // Criar Payment Intent
       const response = await fetch("http://localhost:8080/create-payment-intent", {
         method: "POST",
         headers: {
@@ -40,12 +40,11 @@ const CheckoutForm: React.FC = () => {
       });
       
       if (!response.ok) {
-        throw new Error("Erro ao criar Payment Intent");
+        throw new Error("Error creating Payment Intent");
       }
 
       const { client_secret } = await response.json();
 
-      // Confirmar pagamento
       const { error, paymentIntent } = await stripe.confirmCardPayment(client_secret, {
         payment_method: {
           card: cardNumberElement,
@@ -61,7 +60,6 @@ const CheckoutForm: React.FC = () => {
       }
 
       if (paymentIntent?.status === "succeeded") {
-        // Criar gift card
         const giftCardResponse = await fetch("http://localhost:8080/gift-card", {
           method: "POST",
           headers: {
@@ -75,15 +73,16 @@ const CheckoutForm: React.FC = () => {
         });
 
         if (!giftCardResponse.ok) {
-          throw new Error("Falha ao criar gift card");
+          throw new Error("Failed to create gift card");
         }
 
-        // Forçar o redirecionamento usando window.location
         window.location.href = "/Success";
       }
     } catch (err) {
-      console.error("Erro durante o processo de checkout:", err);
-      alert("Ocorreu um erro durante o processo de pagamento. Por favor, tente novamente.");
+      console.error("Error during checkout process:", err);
+      alert("An error occurred during the payment process. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -96,7 +95,7 @@ const CheckoutForm: React.FC = () => {
 
       <div className="flex space-x-4">
         <div className="w-1/2">
-          <label className="block text-sm font-medium text-gray-700">Expiration Date</label>
+          <label className="block text-sm font-medium text-gray-700">Expiry Date</label>
           <CardExpiryElement className="mt-2 p-3 w-full border border-gray-300 rounded-md shadow-sm focus:border-gray-500 focus:ring-gray-500 transition-colors duration-300" />
         </div>
         <div className="w-1/2">
@@ -107,10 +106,14 @@ const CheckoutForm: React.FC = () => {
 
       <button
         type="submit"
-        className="w-full p-3 bg-gray-800 text-white font-semibold rounded-md hover:bg-gray-700 transition-colors duration-300 ease-in-out"
-        disabled={!stripe}
+        className="w-full p-3 bg-gray-800 text-white font-semibold rounded-md hover:bg-gray-700 transition-colors duration-300 ease-in-out flex items-center justify-center"
+        disabled={!stripe || isLoading}
       >
-        Pagar ${giftCardData.amount}
+        {isLoading ? (
+          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
+        ) : (
+          `Pay £${giftCardData.amount}`
+        )}
       </button>
     </form>
   );
