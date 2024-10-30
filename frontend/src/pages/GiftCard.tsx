@@ -1,33 +1,21 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
 import "./Dashboard.css";
+import { useGiftCard } from '../context/GiftCardContext';
 
 const GiftCardPage: React.FC = () => {
-  const [amount, setAmount] = useState<number>(50); // Valor inicial padrão
-  const [recipientEmail, setRecipientEmail] = useState<string>(""); // Email do destinatário
-  const [recipientName, setRecipientName] = useState<string>(""); // Nome do destinatário
-  const [message, setMessage] = useState<string>(""); // Mensagem personalizada
-  const router = useRouter(); // Hook do Next.js para navegação
+  const router = useRouter();
+  const { giftCardData, setGiftCardData } = useGiftCard();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Verificar se o nome e email estão preenchidos
-    if (!recipientEmail || !recipientName) {
+    if (!giftCardData.recipientEmail || !giftCardData.recipientName) {
       alert("Preencha o nome e o email do destinatário.");
       return;
     }
 
-    // Redireciona para a página de checkout com os parâmetros via query string
-    router.push({
-      pathname: "./Checkout", // O caminho da página de checkout
-      query: {
-        amount: amount, // Valor selecionado
-        recipientName: recipientName, // Nome do destinatário
-        recipientEmail: recipientEmail, // Email do destinatário
-        message: message // Mensagem opcional
-      }
-    });
+    router.push('./Checkout');
   };
 
   return (
@@ -39,15 +27,18 @@ const GiftCardPage: React.FC = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Recipient's Name
+              Nome do Destinatário
             </label>
             <input
               type="text"
-              value={recipientName}
-              onChange={(e) => setRecipientName(e.target.value)}
+              value={giftCardData.recipientName}
+              onChange={(e) => setGiftCardData({
+                ...giftCardData,
+                recipientName: e.target.value
+              })}
               required
               className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-              placeholder="Enter recipient's name"
+              placeholder="Digite o nome do destinatário"
             />
           </div>
 
@@ -57,8 +48,11 @@ const GiftCardPage: React.FC = () => {
             </label>
             <input
               type="email"
-              value={recipientEmail}
-              onChange={(e) => setRecipientEmail(e.target.value)}
+              value={giftCardData.recipientEmail}
+              onChange={(e) => setGiftCardData({
+                ...giftCardData,
+                recipientEmail: e.target.value
+              })}
               required
               className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
               placeholder="Enter recipient's email"
@@ -70,8 +64,11 @@ const GiftCardPage: React.FC = () => {
               Gift Card Amount
             </label>
             <select
-              value={amount}
-              onChange={(e) => setAmount(Number(e.target.value))} // Garante que o amount seja um número
+              value={giftCardData.amount}
+              onChange={(e) => setGiftCardData({
+                ...giftCardData,
+                amount: Number(e.target.value)
+              })}
               className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
             >
               <option value={25}>$25</option>
@@ -85,8 +82,11 @@ const GiftCardPage: React.FC = () => {
               Personal Message
             </label>
             <textarea
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
+              value={giftCardData.message}
+              onChange={(e) => setGiftCardData({
+                ...giftCardData,
+                message: e.target.value
+              })}
               className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
               placeholder="Write a message (optional)"
               rows={4}

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from 'framer-motion';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import ChatPopup from '../components/ChatPopup';
 
 import Parallax from '../components/Parallax';
@@ -35,6 +35,19 @@ export default function LandingPage() {
   const [roomId, setRoomId] = useState<string>(''); // Estado para armazenar o Room ID
   const [isOpen, setIsOpen] = useState(false);
 
+  // Criar as refs para cada seção
+  const galleryRef = useRef<HTMLDivElement>(null);
+  const youtubeRef = useRef<HTMLDivElement>(null);
+  const aftercareRef = useRef<HTMLDivElement>(null);
+  const placementRef = useRef<HTMLDivElement>(null);
+  const bookingRef = useRef<HTMLDivElement>(null);
+  const giftCardsRef = useRef<HTMLDivElement>(null);
+
+  // Função para rolar até a seção
+  const scrollToSection = (ref: React.RefObject<HTMLDivElement>) => {
+    ref.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   useEffect(() => {
     if (showChat && !roomId) {
       const newRoomId = generateRoomId();
@@ -54,7 +67,19 @@ export default function LandingPage() {
 
   return (
     <div className="bg-black text-white relative overflow-hidden">
-      <Header isOpen={isOpen} setIsOpen={setIsOpen} />
+      <Header 
+        isOpen={isOpen} 
+        setIsOpen={setIsOpen}
+        scrollToSection={scrollToSection}
+        refs={{
+          gallery: galleryRef,
+          youtube: youtubeRef,
+          aftercare: aftercareRef,
+          placement: placementRef,
+          booking: bookingRef,
+          giftCards: giftCardsRef
+        }}
+      />
 
       {/* Conteúdo principal da página
       <motion.section className="h-screen flex flex-col justify-center items-center bg-black z-10 relative"
@@ -84,9 +109,24 @@ export default function LandingPage() {
       <HoverSection />
       <ArtistsSection />
       <YouTubeSection />
-      <ImageCarousel images={carouselImages} />
-      <AftercareSection />
-      <BookingFeeSection />
+      <div ref={galleryRef}>
+        <ImageCarousel images={carouselImages} />
+      </div>
+      <div ref={youtubeRef}>
+        <YouTubeSection />
+      </div>
+      <div ref={aftercareRef}>
+        <AftercareSection />
+      </div>
+      <div ref={placementRef}>
+        <Parallax />
+      </div>
+      <div ref={bookingRef}>
+        <BookingFeeSection />
+      </div>
+      <div ref={giftCardsRef}>
+        {/* Componente GiftCards aqui */}
+      </div>
       <Footer />
 
       {/* Botão de Chat */}

@@ -21,33 +21,14 @@
 // 		return
 // 	}
 
-// 	json.Code = code 
-
+// 	json.Code = code
 
 // 	c.JSON(http.StatusOK, gin.H{
 // 		"giftcard_Code": json.Code,
 // 	})
 // }
 
-// func ProcessGiftCardCreationAndSendEmailHandler(c *gin.Context){
-
-// 	var request models.GiftcardRequest
-
-// 	if err := c.ShouldBindJSON(&request); err != nil {
-// 		c.JSON(400, gin.H{"error": err.Error()})
-// 		return
-// 	}
-
-// 	err := services.ProcessGiftCardCreationAndSendEmail(request)
-// 	if err != nil {
-// 		c.JSON(400, gin.H{"error": err.Error()})
-// 		return
-// 	}
-
-// 	c.JSON(http.StatusOK, gin.H{
-// 		"message": "Gift card successfully sended!",
-// 	})
-// }
+//
 
 // func UseGiftCardHandler(c *gin.Context) {
 // 	// Estrutura para receber o JSON de entrada (com o código do giftcard)
@@ -68,20 +49,22 @@
 // 		return
 // 	}
 
-// 	// Retorna o valor do gift card e uma mensagem de sucesso
-// 	c.JSON(http.StatusOK, gin.H{
-// 		"value": value,
-// 		"message": "Gift card successfully used",
-// 	})
-// }
+//		// Retorna o valor do gift card e uma mensagem de sucesso
+//		c.JSON(http.StatusOK, gin.H{
+//			"value": value,
+//			"message": "Gift card successfully used",
+//		})
+//	}
 package handlers
 
 import (
 	"LaMigraInk/backend/models"
+	"LaMigraInk/backend/services"
 	// "encoding/json"
-	"github.com/gin-gonic/gin"
 	"fmt"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 
 	"github.com/stripe/stripe-go/v72"
 	"github.com/stripe/stripe-go/v72/paymentintent"
@@ -110,4 +93,24 @@ func CreatePaymentIntentHandler(c *gin.Context) {
 
 	// Retorna o client_secret ao frontend para confirmação de pagamento
 	c.JSON(http.StatusOK, gin.H{"client_secret": intent.ClientSecret})
+}
+
+func ProcessGiftCardCreationAndSendEmailHandler(c *gin.Context){
+
+	var request models.GiftcardRequest
+
+	if err := c.ShouldBindJSON(&request); err != nil {
+		c.JSON(400, gin.H{"error": err.Error()})
+		return
+	}
+
+	err := services.ProcessGiftCardCreationAndSendEmail(request)
+	if err != nil {
+		c.JSON(400, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Gift card successfully sended!",
+	})
 }

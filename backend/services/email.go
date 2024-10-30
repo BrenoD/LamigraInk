@@ -5,50 +5,48 @@ import (
 	"fmt"
 	"net/smtp"
 	"os"
-
 )
 
 func SendGiftCardEmail(request models.GiftcardRequest, code string) error {
-
-	// Autenticação de email
-	from := os.Getenv("EMAIL_SENDER")          // Remetente do email
-	password := os.Getenv("EMAIL_APP_PASSWORD") // Senha de app (Google App Password)
+	// Email authentication
+	from := os.Getenv("EMAIL_SENDER")          // Email sender
+	password := os.Getenv("EMAIL_APP_PASSWORD") // App password (Google App Password)
 
 	if from == "" || password == "" {
-		return fmt.Errorf("As variáveis de ambiente EMAIL_SENDER ou EMAIL_APP_PASSWORD não estão definidas")
+		return fmt.Errorf("Environment variables EMAIL_SENDER or EMAIL_APP_PASSWORD are not set")
 	}
 
-	// Informações do servidor SMTP
+	// SMTP server information
 	smtpHost := "smtp.gmail.com"
 	smtpPort := "587"
 
-	// Destinatário
+	// Recipient
 	to := request.Email
 
-	// Assunto e corpo do email
-	subject := "Seu Gift Card de R$%.2f da La MiGra Ink!"
+	// Subject and email body
+	subject := "Your La MiGra Ink Gift Card worth £%.2f!"
 	body := fmt.Sprintf(`
-		Olá %s,
+		Hello %s,
 
-		Obrigado por escolher a La MiGra Ink! Estamos felizes em te enviar um gift card no valor de R$%.2f.
+		Thank you for choosing La MiGra Ink! We're happy to send you a gift card worth £%.2f.
 
-		Seu código de gift card é: %s
+		Your gift card code is: %s
 
-		Para utilizar seu gift card, basta aplicar este código no checkout ao fazer sua próxima compra.
+		To use your gift card, simply apply this code at checkout when making your next purchase.
 
-		Aproveite!
+		Enjoy!
 
-		Atenciosamente,
-		Equipe La MiGra Ink
+		Best regards,
+		La MiGra Ink Team
 	`, request.RecipientName, request.Value, code)
 
-	// Mensagem formatada para envio
+	// Formatted message for sending
 	message := fmt.Sprintf("Subject: %s\n\n%s", fmt.Sprintf(subject, request.Value), body)
 
-	// Configuração de autenticação
+	// Authentication configuration
 	auth := smtp.PlainAuth("", from, password, smtpHost)
 
-	// Envio do email
+	// Send email
 	err := smtp.SendMail(
 		smtpHost+":"+smtpPort,
 		auth,
@@ -57,7 +55,7 @@ func SendGiftCardEmail(request models.GiftcardRequest, code string) error {
 		[]byte(message),
 	)
 	if err != nil {
-		return fmt.Errorf("Erro ao enviar email: %v", err)
+		return fmt.Errorf("Error sending email: %v", err)
 	}
 
 	return nil

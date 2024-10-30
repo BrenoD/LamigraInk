@@ -9,8 +9,6 @@ import (
 	"github.com/google/uuid"
 )
 
-
-
 func CreateNewGiftCard(value float32) (string, error) {
 	query := "INSERT INTO giftcards (code, value, status) VALUES ($1, $2, $3)"
 
@@ -33,14 +31,13 @@ func UseGiftCard(code string) (float32, error) {
         return 0, fmt.Errorf("error querying gift card: %v", err)
     }
 
-    // Desativa o gift card após usá-lo
+    // Deactivates the gift card after using it
     if err := disableGiftCard(code); err != nil {
         return 0, fmt.Errorf("failed to disable gift card: %v", err)
     }
 
     return value, nil
 }
-
 
 func disableGiftCard(code string) error {
 	query := "UPDATE giftcards SET status = 'disabled' WHERE code = $1;"
@@ -56,7 +53,7 @@ func ProcessGiftCardCreationAndSendEmail(request models.GiftcardRequest) error {
 
 	code, err := CreateNewGiftCard(request.Value)
 	if err != nil {
-		return fmt.Errorf("Erro ao criar o gift card: %v", err)
+		return fmt.Errorf("Error creating gift card: %v", err)
 	}
 
 	giftcard := models.Giftcard{
@@ -66,7 +63,7 @@ func ProcessGiftCardCreationAndSendEmail(request models.GiftcardRequest) error {
 
 	err = SendGiftCardEmail(request, giftcard.Code)
 	if err != nil {
-		return fmt.Errorf("Erro ao enviar o gift card por email: %v", err)
+		return fmt.Errorf("Error sending gift card via email: %v", err)
 	}
 
 	return nil
