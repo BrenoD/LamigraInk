@@ -71,9 +71,9 @@ const GiftCardPage: React.FC = () => {
               })}
               className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
             >
-              <option value={25}>$25</option>
-              <option value={50}>$50</option>
-              <option value={100}>$100</option>
+              <option value={25}>£25</option>
+              <option value={50}>£50</option>
+              <option value={100}>£100</option>
             </select>
           </div>
 
