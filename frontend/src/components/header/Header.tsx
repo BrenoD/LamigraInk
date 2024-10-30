@@ -12,6 +12,7 @@ interface HeaderProps {
         placement: React.RefObject<HTMLDivElement>;
         booking: React.RefObject<HTMLDivElement>;
         giftCards: React.RefObject<HTMLDivElement>;
+        artistsSection: React.RefObject<HTMLDivElement>;
     };
 }
 
@@ -21,9 +22,9 @@ const Header: React.FC<HeaderProps> = ({ isOpen, setIsOpen, scrollToSection, ref
 
     const sections = [
         { name: 'HOME', onClick: () => window.scrollTo({ top: 0, behavior: 'smooth' }) },
-        { name: 'GALLERY', onClick: () => {
-            scrollToSection(refs.gallery);
-            setActiveSection('GALLERY');
+        { name: 'OUR TEAM', onClick: () => {
+            scrollToSection(refs.artistsSection);
+            setActiveSection('OUR TEAM');
         }},
         { name: 'YOUTUBE', onClick: () => {
             scrollToSection(refs.youtube);
@@ -34,7 +35,7 @@ const Header: React.FC<HeaderProps> = ({ isOpen, setIsOpen, scrollToSection, ref
             setActiveSection('AFTERCARE');
         }},
         { name: 'LOCATION', onClick: () => {
-            scrollToSection(refs.gallery);
+            scrollToSection(refs.placement);
             setActiveSection('LOCATION');
         }},
         { name: 'BOOKING', onClick: () => {

@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
 import ChatPopup from '../components/ChatPopup';
 
@@ -42,7 +41,7 @@ export default function LandingPage() {
   const placementRef = useRef<HTMLDivElement>(null);
   const bookingRef = useRef<HTMLDivElement>(null);
   const giftCardsRef = useRef<HTMLDivElement>(null);
-
+  const artistsSectionRef = useRef<HTMLDivElement>(null);
   // Função para rolar até a seção
   const scrollToSection = (ref: React.RefObject<HTMLDivElement>) => {
     ref.current?.scrollIntoView({ behavior: 'smooth' });
@@ -77,18 +76,10 @@ export default function LandingPage() {
           aftercare: aftercareRef,
           placement: placementRef,
           booking: bookingRef,
-          giftCards: giftCardsRef
+          giftCards: giftCardsRef,
+          artistsSection: artistsSectionRef
         }}
       />
-
-      {/* Conteúdo principal da página
-      <motion.section className="h-screen flex flex-col justify-center items-center bg-black z-10 relative"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1 }}
-      >
-        <h1 className="text-6xl font-bold">Arte. Tatuagem. Cultura.</h1>
-      </motion.section> */}
 
       <video
         autoPlay
@@ -101,14 +92,12 @@ export default function LandingPage() {
         Your browser does not support the video tag.
       </video>
 
-
-
-     
       <HeroSection />
-      <Parallax />
+      <Parallax onGalleryClick={() => scrollToSection(galleryRef)} />
       <HoverSection />
-      <ArtistsSection />
-      <YouTubeSection />
+      <div ref={artistsSectionRef}>
+        <ArtistsSection />
+      </div>
       <div ref={galleryRef}>
         <ImageCarousel images={carouselImages} />
       </div>
@@ -119,7 +108,7 @@ export default function LandingPage() {
         <AftercareSection />
       </div>
       <div ref={placementRef}>
-        <Parallax />
+        <Parallax onGalleryClick={() => scrollToSection(galleryRef)} />
       </div>
       <div ref={bookingRef}>
         <BookingFeeSection />
