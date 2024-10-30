@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
+import styles from './styles.css';
 
 interface ImageCarouselProps {
   images: string[];
@@ -41,17 +42,17 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, interval = 5000 }
   }, [nextSlide, interval]);
 
   return (
-    <div className="relative w-full pt-16" style={{
+    <div className="relative w-full pt-8 md:pt-16" style={{
       backgroundImage: "url('https://ledstattoo.com.br/templates/yootheme/cache/bg-01-d805f7dc.webp')",
       backgroundSize: 'cover',
       backgroundPosition: 'center',
     }}>
-      <div className="flex justify-center mb-8">
-        <h2 className="text-4xl font-bold text-white pb-2 border-b-4 border-orange-300">
-          Nosso Estúdio
+      <div className="flex justify-center mb-4 md:mb-8">
+        <h2 className="text-2xl md:text-4xl font-bold text-white pb-2 border-b-4 border-orange-300 font-inter">
+          Our Studio
         </h2>
       </div>
-      <div className="relative w-full h-[calc(100vh-12rem)] overflow-hidden">
+      <div className="relative w-full h-[50vh] md:h-[calc(100vh-12rem)] overflow-hidden">
         <AnimatePresence initial={false}>
           <motion.div
             key={currentIndex}
@@ -68,29 +69,43 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, interval = 5000 }
           >
             <Image
               src={images[currentIndex]}
-              alt={`Slide ${currentIndex + 1}`}
+              alt={`Studio image ${currentIndex + 1}`}
               layout="fill"
               objectFit="cover"
+              priority={currentIndex === 0}
+              quality={75}
               unoptimized={images[currentIndex].startsWith('http')}
+              className="select-none"
             />
           </motion.div>
         </AnimatePresence>
-        <motion.button
-          className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-4 rounded-full text-2xl z-10"
-          onClick={prevSlide}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-        >
-          &#10094;
-        </motion.button>
-        <motion.button
-          className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-4 rounded-full text-2xl z-10"
-          onClick={nextSlide}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-        >
-          &#10095;
-        </motion.button>
+        
+        {/* Botões atualizados */}
+        <div className="absolute left-2 md:left-4 top-1/2 transform -translate-y-1/2 z-10">
+          <motion.button
+            className="bg-black bg-opacity-50 text-white p-2 md:p-4 rounded-full text-xl md:text-2xl hover:bg-opacity-70 transition-colors duration-300"
+            onClick={prevSlide}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            aria-label="Imagem anterior"
+            style={{ WebkitTapHighlightColor: 'transparent' }}
+          >
+            &#10094;
+          </motion.button>
+        </div>
+        
+        <div className="absolute right-2 md:right-4 top-1/2 transform -translate-y-1/2 z-10">
+          <motion.button
+            className="bg-black bg-opacity-50 text-white p-2 md:p-4 rounded-full text-xl md:text-2xl hover:bg-opacity-70 transition-colors duration-300"
+            onClick={nextSlide}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            aria-label="Próxima imagem"
+            style={{ WebkitTapHighlightColor: 'transparent' }}
+          >
+            &#10095;
+          </motion.button>
+        </div>
       </div>
     </div>
   );

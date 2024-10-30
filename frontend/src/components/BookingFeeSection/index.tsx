@@ -1,9 +1,10 @@
+import './styles.css';
 import React, { forwardRef, useEffect } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { UserIcon, EnvelopeIcon, PhoneIcon, MapPinIcon, PencilIcon } from '@heroicons/react/24/outline';
 
-const BookingFeeSection = forwardRef<HTMLDivElement, {}>((props, ref) => {
+const BookingFeeSection = forwardRef<HTMLDivElement, Record<string, never>>((props, ref) => {
   const controls = useAnimation();
   const [inViewRef, inView] = useInView({
     triggerOnce: true,
@@ -37,8 +38,16 @@ const BookingFeeSection = forwardRef<HTMLDivElement, {}>((props, ref) => {
     },
   };
 
-  const inputClass = "block w-full bg-black bg-opacity-50 text-white border border-white border-opacity-50 rounded-md pl-3 pr-3 py-2 focus:outline-none transition-all duration-300";
-  const iconClass = "w-5 h-5 text-white opacity-75 mr-3";
+  const inputClass = `
+    block w-full bg-black bg-opacity-50 text-white 
+    border border-white border-opacity-50 rounded-md 
+    px-3 py-2 text-sm md:text-base
+    focus:outline-none focus:ring-2 focus:ring-orange-300
+    transition-all duration-300
+    font-sans
+  `;
+
+  const iconClass = "w-4 h-4 md:w-5 md:h-5 text-white opacity-75 mr-3";
 
   const renderInput = (name: string, placeholder: string, type: string = "text", Icon: React.ComponentType<React.SVGProps<SVGSVGElement>>) => (
     <motion.div className="flex items-center relative" variants={itemVariants}>
@@ -60,7 +69,7 @@ const BookingFeeSection = forwardRef<HTMLDivElement, {}>((props, ref) => {
         if (typeof ref === 'function') ref(node as HTMLDivElement);
         else if (ref) ref.current = node as HTMLDivElement;
       }}
-      className="relative w-full min-h-screen py-16 flex items-center justify-center overflow-hidden"
+      className="relative w-full min-h-screen py-8 md:py-16 flex items-center justify-center overflow-hidden font-sans"
       style={{
         backgroundImage: 'url("https://ledstattoo.com.br/templates/yootheme/cache/bg-01-d805f7dc.webp")',
         backgroundSize: 'cover',
@@ -70,20 +79,20 @@ const BookingFeeSection = forwardRef<HTMLDivElement, {}>((props, ref) => {
     >
       <div className="absolute inset-0 bg-black bg-opacity-70"></div>
       <motion.div
-        className="relative z-10 max-w-4xl mx-auto px-4 text-white text-left"
+        className="relative z-10 w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-white"
         initial="hidden"
         animate={controls}
         variants={contentVariants}
       >
         <motion.h2 
-          className="text-4xl md:text-5xl font-bold mb-8 text-white text-center relative"
+          className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 md:mb-8 text-white text-center relative"
           variants={itemVariants}
         >
           BOOKING FEE
           <span className="absolute left-0 right-0 bottom-0 h-0.5 bg-orange-300"></span>
         </motion.h2>
         
-        <motion.div className="space-y-6 text-lg" variants={contentVariants}>
+        <motion.div className="space-y-4 md:space-y-6 text-base md:text-lg" variants={contentVariants}>
           <motion.p variants={itemVariants}>
             Book your free consultation. Please fill out the form if you'd like to get a quote for your tattoo or if you have a general enquiry. Try to add as much detail as possible so we can achieve the best results for you. Depending on the design, further consultation may be required.
           </motion.p>
@@ -105,8 +114,8 @@ const BookingFeeSection = forwardRef<HTMLDivElement, {}>((props, ref) => {
           </motion.p>
         </motion.div>
         
-        <motion.form className="mt-12 space-y-6" variants={contentVariants}>
-          <motion.div className="grid grid-cols-1 md:grid-cols-2 gap-6" variants={itemVariants}>
+        <motion.form className="mt-8 md:mt-12 space-y-4 md:space-y-6" variants={contentVariants}>
+          <motion.div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6" variants={itemVariants}>
             {renderInput("firstName", "First Name", "text", UserIcon)}
             {renderInput("lastName", "Last Name", "text", UserIcon)}
           </motion.div>
@@ -117,7 +126,7 @@ const BookingFeeSection = forwardRef<HTMLDivElement, {}>((props, ref) => {
             <div className="flex items-center relative">
               <PhoneIcon className={iconClass} />
               <select id="countryCode" name="countryCode" className={inputClass}>
-                <option value="+44">GB +44</option>
+                <option value="+44">UK +44</option>
                 {/* Add more country codes as needed */}
               </select>
             </div>
@@ -130,7 +139,7 @@ const BookingFeeSection = forwardRef<HTMLDivElement, {}>((props, ref) => {
             <PencilIcon className={iconClass} />
             <select id="service" name="service" className={`${inputClass} appearance-none`}>
               <option value="">Select a Service</option>
-              {/* Add service options here */}
+              <option value="tattoo">Get a Tattoo</option>
             </select>
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-white">
               <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -191,7 +200,12 @@ const BookingFeeSection = forwardRef<HTMLDivElement, {}>((props, ref) => {
           <motion.div variants={itemVariants}>
             <button
               type="submit"
-              className="w-full flex justify-center py-2 px-4 border border-white border-opacity-50 rounded-md shadow-sm text-sm font-medium text-white bg-transparent focus:outline-none"
+              className="w-full flex justify-center py-2 px-4 
+                border border-white border-opacity-50 rounded-md 
+                text-sm md:text-base font-medium text-white 
+                bg-transparent hover:bg-white hover:bg-opacity-10
+                focus:outline-none focus:ring-2 focus:ring-orange-300
+                transition-all duration-300"
             >
               Submit
             </button>

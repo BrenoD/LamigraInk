@@ -78,10 +78,10 @@ package handlers
 
 import (
 	"LaMigraInk/backend/models"
+	"encoding/json"
 	"fmt"
 	"net/http"
 
-	"github.com/gin-gonic/gin"
 	"github.com/stripe/stripe-go/v72"
 	"github.com/stripe/stripe-go/v72/paymentintent"
 )
