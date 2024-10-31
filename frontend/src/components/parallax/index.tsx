@@ -90,7 +90,7 @@ const ParallaxSection: React.FC<ParallaxSectionProps> = ({ onGalleryClick }) => 
               dozens of awards and a specialised team.
             </span>
             <span className="mobile-text">
-              Latin America's largest award-winning tattoo studio
+              Latin America&apos;s largest award-winning tattoo studio
             </span>
           </p>
           <p className={`description ${getAnimationClass(3)}`}>

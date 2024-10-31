@@ -11,7 +11,7 @@ const stripePromise = loadStripe("pk_test_51QDnNpG6qzKVA8tL098WPy0ub0SSeO4Ef7ALX
 const CheckoutForm: React.FC = () => {
   const stripe = useStripe();
   const elements = useElements();
-  const router = useRouter();
+  // const router = useRouter();
   const { giftCardData } = useGiftCard();
   const [isLoading, setIsLoading] = useState(false);
 

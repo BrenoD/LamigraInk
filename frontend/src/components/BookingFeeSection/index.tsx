@@ -94,7 +94,7 @@ const BookingFeeSection = forwardRef<HTMLDivElement, Record<string, never>>((pro
         
         <motion.div className="space-y-4 md:space-y-6 text-base md:text-lg" variants={contentVariants}>
           <motion.p variants={itemVariants}>
-            Book your free consultation. Please fill out the form if you'd like to get a quote for your tattoo or if you have a general enquiry. Try to add as much detail as possible so we can achieve the best results for you. Depending on the design, further consultation may be required.
+            Book your free consultation. Please fill out the form if you&apos;d like to get a quote for your tattoo or if you have a general enquiry. Try to add as much detail as possible so we can achieve the best results for you. Depending on the design, further consultation may be required.
           </motion.p>
           
           <motion.p variants={itemVariants}>

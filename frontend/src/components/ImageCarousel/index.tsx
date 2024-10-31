@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import styles from './styles.css';
-
 interface ImageCarouselProps {
   images: string[];
   interval?: number;

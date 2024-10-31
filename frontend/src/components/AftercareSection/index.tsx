@@ -3,10 +3,11 @@ import { motion, useAnimation } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import './styles.css';
 
-interface AftercareSectionProps extends Record<string, unknown> {
+type AftercareSectionProps = Record<string, unknown>;
   // Mesmo que não tenha props no momento, é melhor usar uma interface
+  //retirei interface e coloquei type, poq estava dadno erro de producao
   // para futuras extensões
-}
+
 
 const AftercareSection = forwardRef<HTMLDivElement, AftercareSectionProps>((props, ref) => {
   const controls = useAnimation();

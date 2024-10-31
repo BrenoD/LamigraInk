@@ -7,7 +7,7 @@ import { artistsData, loadArtistGallery } from '@/data/artists';
 import { FadeInOnScroll } from '@/components/FadeInOnScroll';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
 import { useScrollPosition } from '@/hooks/useScrollPosition';
-import Link from 'next/link';
+// import Link from 'next/link';
 
 export default function ArtistDetailPage() {
   const params = useParams();

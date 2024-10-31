@@ -51,7 +51,7 @@ const GiftCardPage: React.FC = () => {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700">
-                Recipient's Name
+                Recipient&apos;s Name
               </label>
               <input
                 type="text"
@@ -65,7 +65,7 @@ const GiftCardPage: React.FC = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700">
-                Recipient's Email
+                Recipient&apos;s Email
               </label>
               <input
                 type="email"
