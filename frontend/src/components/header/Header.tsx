@@ -12,6 +12,7 @@ interface HeaderProps {
         placement: React.RefObject<HTMLDivElement>;
         booking: React.RefObject<HTMLDivElement>;
         giftCards: React.RefObject<HTMLDivElement>;
+        artistsSection: React.RefObject<HTMLDivElement>;
     };
 }
 
@@ -20,13 +21,31 @@ const Header: React.FC<HeaderProps> = ({ isOpen, setIsOpen, scrollToSection, ref
     const [isScrolled, setIsScrolled] = useState(false);
 
     const sections = [
-        { name: 'HOME', onClick: () => {} },
-        { name: 'GALLERY', onClick: () => scrollToSection(refs.gallery) },
-        { name: 'YOUTUBE', onClick: () => scrollToSection(refs.youtube) },
-        { name: 'AFTERCARE', onClick: () => scrollToSection(refs.aftercare) },
-        { name: 'LOCATION', onClick: () => scrollToSection(refs.placement) },
-        { name: 'BOOKING', onClick: () => scrollToSection(refs.booking) },
-        { name: 'GIFT CARDS', onClick: () => scrollToSection(refs.giftCards) },
+        { name: 'HOME', onClick: () => window.scrollTo({ top: 0, behavior: 'smooth' }) },
+        { name: 'OUR TEAM', onClick: () => {
+            scrollToSection(refs.artistsSection);
+            setActiveSection('OUR TEAM');
+        }},
+        { name: 'YOUTUBE', onClick: () => {
+            scrollToSection(refs.youtube);
+            setActiveSection('YOUTUBE');
+        }},
+        { name: 'AFTERCARE', onClick: () => {
+            scrollToSection(refs.aftercare);
+            setActiveSection('AFTERCARE');
+        }},
+        { name: 'LOCATION', onClick: () => {
+            scrollToSection(refs.placement);
+            setActiveSection('LOCATION');
+        }},
+        { name: 'BOOKING', onClick: () => {
+            scrollToSection(refs.booking);
+            setActiveSection('BOOKING');
+        }},
+        { name: 'GIFT CARDS', onClick: () => {
+            scrollToSection(refs.giftCards);
+            setActiveSection('GIFT CARDS');
+        }},
     ];
 
     useEffect(() => {
@@ -53,7 +72,10 @@ const Header: React.FC<HeaderProps> = ({ isOpen, setIsOpen, scrollToSection, ref
                             key={section.name} 
                             href="#" 
                             className={`relative text-white hover:text-orange-300`}
-                            onClick={() => setActiveSection(section.name)}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                section.onClick();
+                            }}
                         >
                             {section.name}
                             <span className={`absolute left-0 right-0 bottom-0 h-0.5 bg-orange-300 transform scale-x-0 transition-transform duration-300 ${activeSection === section.name ? 'scale-x-100' : ''}`}></span>

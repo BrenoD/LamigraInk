@@ -12,43 +12,43 @@ import (
 
 func main() {
 
-	// Inicializa a chave do Stripe
+	// Initialize Stripe key
 	config.InitStripe()
 
-	// Abre a conexão com o banco de dados
+	// Open database connection
 	if err := config.OpenConn(); err != nil {
-		log.Fatalf("Erro ao abrir a conexão com o banco de dados: %v", err)
+		log.Fatalf("Error opening database connection: %v", err)
 	}
 	defer func() {
 		if err := config.CloseConn(); err != nil {
-			log.Printf("Erro ao fechar a conexão com o banco de dados: %v", err)
+			log.Printf("Error closing database connection: %v", err)
 		}
 	}()
 
-	// Inicializa o router do Gin
+	// Initialize Gin router
 	router := gin.Default()
 
-	// Configura o CORS para permitir requisições de outros domínios
+	// Configure CORS to allow requests from other domains
 	config := cors.DefaultConfig()
-	config.AllowOrigins = []string{"http://localhost:3000"} // Permite apenas o frontend local
+	config.AllowOrigins = []string{"http://localhost:3000"} // Allow only local frontend
 	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
 	config.AllowHeaders = []string{"Origin", "Content-Type", "Accept"}
 
 	router.Use(cors.New(config))
 
-	// Rotas para gift cards
-	// router.POST("/giftcard", handlers.ProcessGiftCardCreationAndSendEmailHandler)
+	// Gift card routes
+	router.POST("/gift-card", handlers.ProcessGiftCardCreationAndSendEmailHandler)
 	// router.POST("/use-giftcard", handlers.UseGiftCardHandler)
 
-	// Rota para criar Payment Intent no Stripe
+	// Route to create Payment Intent in Stripe
 	router.POST("/create-payment-intent", handlers.CreatePaymentIntentHandler)
 
-	// Rota WebSocket para /ws
+	// WebSocket route for /ws
 	router.GET("/ws", func(c *gin.Context) {
-		handlers.HandleConnections(c.Writer, c.Request) // Chama o handler do WebSocket
+		handlers.HandleConnections(c.Writer, c.Request) // Call WebSocket handler
 	})
 
-	// Rota para listar chats ativos (GET)
+	// Route to list active chats (GET)
 	router.GET("/active-chats", func(c *gin.Context) {
 		activeChatList := []string{}
 		for roomID := range handlers.ActiveChats {
@@ -57,7 +57,7 @@ func main() {
 		c.JSON(200, activeChatList)
 	})
 
-	// Rota para registrar chats ativos (POST)
+	// Route to register active chats (POST)
 	router.POST("/active-chats", func(c *gin.Context) {
 		var request struct {
 			RoomID string `json:"roomId"`
@@ -70,8 +70,8 @@ func main() {
 		c.JSON(200, gin.H{"status": "Chat registered as active"})
 	})
 
-	// Inicia o servidor na porta 8080
+	// Start server on port 8080
 	if err := router.Run(":8080"); err != nil {
-		log.Fatalf("Falha ao iniciar o servidor: %v", err)
+		log.Fatalf("Failed to start server: %v", err)
 	}
 }

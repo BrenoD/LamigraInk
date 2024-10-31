@@ -1,7 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react';
 import './styles.css';
 
-const ParallaxSection = () => {
+interface ParallaxSectionProps {
+  onGalleryClick?: () => void;
+}
+
+const ParallaxSection: React.FC<ParallaxSectionProps> = ({ onGalleryClick }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [animationStep, setAnimationStep] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
@@ -98,13 +102,13 @@ const ParallaxSection = () => {
               Professional tattoos, piercings & laser removal
             </span>
           </p>
-          <a
+          <button
+            onClick={onGalleryClick}
             className={`cta-button ${getAnimationClass(4)}`}
-            href="/studio"
           >
             <span className="desktop-text">Discover Our Studio</span>
             <span className="mobile-text">View Studio</span>
-          </a>
+          </button>
         </div>
       </div>
     </section>
