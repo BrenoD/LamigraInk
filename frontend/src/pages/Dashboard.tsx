@@ -99,16 +99,16 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-900 text-white p-6">
-      <div className="max-w-full mx-auto flex flex-col lg:flex-row space-x-0 lg:space-x-6 h-screen space-y-6 lg:space-y-0">
-        
+    <div className="min-h-screen bg-zinc-900 text-white flex flex-col p-6 space-y-6">
+      <h1 className="text-3xl font-bold text-center mb-4">Attendant Dashboard</h1>
+
+      <div className="flex flex-col lg:flex-row flex-grow space-y-6 lg:space-y-0 lg:space-x-6 h-full">
+
         {/* Active Chats Section */}
-        <div className="w-full lg:w-1/2 bg-gray-700 bg-opacity-80 p-6 rounded-lg shadow-lg h-screen transition-transform duration-300 ease-in-out">
-          <h1 className="text-3xl font-bold text-center mb-8">Attendant Dashboard</h1>
+        <div className="w-full lg:w-1/2 bg-gray-700 bg-opacity-80 p-6 rounded-lg shadow-lg flex flex-col h-full">
+          <h2 className="text-xl font-semibold mb-4 text-center">Active Chats</h2>
 
-          <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
-            <h2 className="text-xl font-semibold mb-4 text-center">Active Chats</h2>
-
+          <div className="bg-gray-800 p-6 rounded-lg shadow-lg flex-grow">
             {activeChats.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
                 {activeChats.map((chat) => (
@@ -129,9 +129,9 @@ const Dashboard = () => {
         </div>
 
         {/* Payment Section */}
-        <div className="w-full lg:w-1/2 bg-gray-700 bg-opacity-80 p-6 rounded-lg shadow-lg h-screen transition-transform duration-300 ease-in-out">
+        <div className="w-full lg:w-1/2 bg-gray-700 bg-opacity-80 p-6 rounded-lg shadow-lg flex flex-col h-full">
           <h2 className="text-xl font-semibold mb-4 text-center">Payments</h2>
-          <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
+          <div className="bg-gray-800 p-6 rounded-lg shadow-lg flex-grow">
             <p className="text-gray-300 mb-4">Manage customer payments here.</p>
 
             {/* Vouchers */}

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 interface HeaderProps {
     isOpen: boolean;
@@ -20,32 +21,46 @@ const Header: React.FC<HeaderProps> = ({ isOpen, setIsOpen, scrollToSection, ref
     const [activeSection, setActiveSection] = useState('HOME');
     const [isScrolled, setIsScrolled] = useState(false);
 
+    const router = useRouter(); // Move para um ponto seguro, fora do hook de renderização
+
     const sections = [
         { name: 'HOME', onClick: () => window.scrollTo({ top: 0, behavior: 'smooth' }) },
-        { name: 'OUR TEAM', onClick: () => {
-            scrollToSection(refs.artistsSection);
-            setActiveSection('OUR TEAM');
-        }},
-        { name: 'YOUTUBE', onClick: () => {
-            scrollToSection(refs.youtube);
-            setActiveSection('YOUTUBE');
-        }},
-        { name: 'AFTERCARE', onClick: () => {
-            scrollToSection(refs.aftercare);
-            setActiveSection('AFTERCARE');
-        }},
-        { name: 'LOCATION', onClick: () => {
-            scrollToSection(refs.placement);
-            setActiveSection('LOCATION');
-        }},
-        { name: 'BOOKING', onClick: () => {
-            scrollToSection(refs.booking);
-            setActiveSection('BOOKING');
-        }},
-        { name: 'GIFT CARDS', onClick: () => {
-            scrollToSection(refs.giftCards);
-            setActiveSection('GIFT CARDS');
-        }},
+        {
+            name: 'OUR TEAM', onClick: () => {
+                scrollToSection(refs.artistsSection);
+                setActiveSection('OUR TEAM');
+            }
+        },
+        {
+            name: 'YOUTUBE', onClick: () => {
+                scrollToSection(refs.youtube);
+                setActiveSection('YOUTUBE');
+            }
+        },
+        {
+            name: 'AFTERCARE', onClick: () => {
+                scrollToSection(refs.aftercare);
+                setActiveSection('AFTERCARE');
+            }
+        },
+        {
+            name: 'LOCATION', onClick: () => {
+                scrollToSection(refs.placement);
+                setActiveSection('LOCATION');
+            }
+        },
+        {
+            name: 'BOOKING', onClick: () => {
+                scrollToSection(refs.booking);
+                setActiveSection('BOOKING');
+            }
+        },
+        {
+            name: 'GIFT CARDS', onClick: () => {
+                router.push('/GiftCard'); // Usa o router para redirecionar
+                setActiveSection('GIFT CARDS');
+            }
+        },
     ];
 
     useEffect(() => {
@@ -68,17 +83,16 @@ const Header: React.FC<HeaderProps> = ({ isOpen, setIsOpen, scrollToSection, ref
                 </div>
                 <div className="hidden md:flex space-x-10">
                     {sections.map((section) => (
-                        <a 
-                            key={section.name} 
-                            href="#" 
+                        <a
+                            key={section.name}
+                            href="#"
                             className={`relative text-white hover:text-orange-300`}
                             onClick={(e) => {
                                 e.preventDefault();
-                                section.onClick();
+                                section.onClick(); // Chama a função para rolar até a seção correspondente ou redirecionar
                             }}
                         >
                             {section.name}
-                            <span className={`absolute left-0 right-0 bottom-0 h-0.5 bg-orange-300 transform scale-x-0 transition-transform duration-300 ${activeSection === section.name ? 'scale-x-100' : ''}`}></span>
                         </a>
                     ))}
                 </div>
@@ -96,11 +110,15 @@ const Header: React.FC<HeaderProps> = ({ isOpen, setIsOpen, scrollToSection, ref
             <div className={`fixed top-0 left-0 h-full w-64 bg-stone-900 flex flex-col items-center transform transition-transform duration-300 ease-in-out ${isOpen ? "translate-x-0" : "-translate-x-full"} z-50`}>
                 <button onClick={() => setIsOpen(false)} className="text-white p-2 self-end">❌</button>
                 {sections.map((section) => (
-                    <a 
-                        key={section.name} 
-                        href="#" 
+                    <a
+                        key={section.name}
+                        href="#"
                         className={`block p-2 text-white w-full text-center hover:text-orange-300 hover:opacity-40 ${activeSection === section.name ? 'bg-zinc-700 text-white' : 'text-white'}`}
-                        onClick={() => setActiveSection(section.name)}
+                        onClick={(e) => {
+                            e.preventDefault();
+                            section.onClick(); // Chama a função para rolar até a seção correspondente ou redirecionar
+                            setIsOpen(false); // Fecha o menu depois de clicar em uma seção
+                        }}
                     >
                         {section.name}
                     </a>

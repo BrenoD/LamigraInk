@@ -1,14 +1,13 @@
 "use client";
 
+import { FaComment } from "react-icons/fa6";
 import { useState, useEffect, useRef } from 'react';
 import ChatPopup from '../components/ChatPopup';
-
-import Parallax from '../components/Parallax';
-import HoverSection from '../components/HoverSection';
-import ArtistsSection from '../components/ArtistsSection';
-
+import Parallax from '../components/parallax';
+import HoverSection from '../components/hoverSection';
+import ArtistsSection from '../components/artistsSection';
 import Footer from '@/components/Footer';
-import Header from '../components/Header/Header';
+import Header from '../components/header/Header';
 import HeroSection from '@/components/HeroSection';
 import ImageCarousel from '@/components/ImageCarousel';
 import YouTubeSection from '../components/YouTubeSection/index';
@@ -17,8 +16,6 @@ import AftercareSection from '@/components/AftercareSection';
 
 // Array de imagens para o carrossel
 const carouselImages = [
-  'https://t4.ftcdn.net/jpg/07/32/21/35/360_F_732213522_Od8FD6XBPgYmHKtJByVoJaiL8miY2QoN.jpg',
-  'https://t4.ftcdn.net/jpg/07/32/21/35/360_F_732213522_Od8FD6XBPgYmHKtJByVoJaiL8miY2QoN.jpg',
   'https://t4.ftcdn.net/jpg/07/32/21/35/360_F_732213522_Od8FD6XBPgYmHKtJByVoJaiL8miY2QoN.jpg',
   'https://t4.ftcdn.net/jpg/07/32/21/35/360_F_732213522_Od8FD6XBPgYmHKtJByVoJaiL8miY2QoN.jpg',
   'https://t4.ftcdn.net/jpg/07/32/21/35/360_F_732213522_Od8FD6XBPgYmHKtJByVoJaiL8miY2QoN.jpg',
@@ -42,6 +39,7 @@ export default function LandingPage() {
   const bookingRef = useRef<HTMLDivElement>(null);
   const giftCardsRef = useRef<HTMLDivElement>(null);
   const artistsSectionRef = useRef<HTMLDivElement>(null);
+
   // Função para rolar até a seção
   const scrollToSection = (ref: React.RefObject<HTMLDivElement>) => {
     ref.current?.scrollIntoView({ behavior: 'smooth' });
@@ -62,7 +60,6 @@ export default function LandingPage() {
       }).catch(error => console.error("Erro ao registrar chat ativo:", error));
     }
   }, [showChat, roomId]);
-
 
   return (
     <div className="bg-black text-white relative overflow-hidden">
@@ -121,9 +118,9 @@ export default function LandingPage() {
       {/* Botão de Chat */}
       <button
         onClick={() => setShowChat(!showChat)}
-        className="fixed bottom-5 z-50 right-5 bg-green-500 text-white p-3 rounded-full shadow-lg"
+        className="fixed bottom-5 z-50 right-5 bg-green-500 text-white p-5 rounded-full shadow-lg text-4xl flex items-center justify-center"
       >
-        Chat
+      <FaComment />
       </button>
 
       {showChat && roomId && (
