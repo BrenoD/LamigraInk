@@ -56,7 +56,7 @@ const ChatPopup: React.FC<ChatPopupProps> = ({ roomId, userType, onClose }) => {
         content: message,
         senderType: userType,
       };
-      
+
       console.log("Enviando mensagem:", msg); // Log da mensagem a ser enviada
       socket.send(JSON.stringify(msg));
 
@@ -88,14 +88,21 @@ const ChatPopup: React.FC<ChatPopupProps> = ({ roomId, userType, onClose }) => {
               className={`mb-2 ${msg.senderType === userType ? 'text-right' : 'text-left'}`}
             >
               <span
-                className={`block p-2 rounded-lg ${
-                  msg.senderType === 'client' ? 'bg-green-500' : 'bg-blue-500'
-                }`}
+                className={`block p-2 rounded-lg ${msg.senderType === userType
+                    ? 'bg-green-500'
+                    : msg.senderType === 'client'
+                      ? 'bg-blue-500'
+                      : 'bg-blue-500'
+                  }`}
               >
                 <strong>
                   {msg.senderType === 'client'
-                    ? userType === 'client' ? 'Você' : 'Cliente'
-                    : userType === 'attendant' ? 'Você' : 'Atendente'}
+                    ? userType === 'client'
+                      ? 'You'
+                      : 'Client'
+                    : userType === 'attendant'
+                      ? 'You'
+                      : 'Attendant'}
                   :
                 </strong>{' '}
                 {msg.content}
@@ -103,7 +110,7 @@ const ChatPopup: React.FC<ChatPopupProps> = ({ roomId, userType, onClose }) => {
             </div>
           ))
         ) : (
-          <p className="text-center text-gray-500">Nenhuma mensagem ainda.</p>
+          <p className="text-center text-gray-500">No messages yet;</p>
         )}
       </div>
       <div className="mt-2 flex">
@@ -112,13 +119,13 @@ const ChatPopup: React.FC<ChatPopupProps> = ({ roomId, userType, onClose }) => {
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           className="flex-grow p-2 rounded bg-gray-700 text-white"
-          placeholder="Escreva sua mensagem..."
+          placeholder="Write your message..."
         />
         <button
           onClick={sendMessage}
           className="bg-green-500 hover:bg-green-600 text-white p-2 ml-2 rounded"
         >
-          Enviar
+          Send
         </button>
       </div>
     </div>

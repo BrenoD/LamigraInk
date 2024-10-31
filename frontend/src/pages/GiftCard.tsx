@@ -10,6 +10,7 @@ const GiftCardPage: React.FC = () => {
   const [recipientEmail, setRecipientEmail] = useState<string>("");
   const [recipientName, setRecipientName] = useState<string>("");
   const [message, setMessage] = useState<string>("");
+  const [SelectArtist, setArtist] = useState<string>("");
   const router = useRouter();
   const { setGiftCardData } = useGiftCard();
 
@@ -107,6 +108,16 @@ const GiftCardPage: React.FC = () => {
                 onChange={(e) => setMessage(e.target.value)}
                 className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-gray-900"
                 placeholder="Write a message (optional)"
+                rows={4}
+              />
+              <label className="block text-sm font-medium text-gray-700">
+                Select Artist
+              </label>
+              <textarea
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-gray-900"
+                placeholder="Write your favorite Artist"
                 rows={4}
               />
             </div>
