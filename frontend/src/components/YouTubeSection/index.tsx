@@ -1,9 +1,6 @@
 import React, { useState, useRef } from 'react';
-import dynamic from 'next/dynamic';
 import { Parallax } from 'react-parallax';
-
-// Corrigindo o erro do dynamic import
-const YouTube = dynamic(() => import('react-youtube').then((mod) => mod.default), { ssr: false });
+import YouTube from 'react-youtube';
 
 interface Video {
   id: string;
