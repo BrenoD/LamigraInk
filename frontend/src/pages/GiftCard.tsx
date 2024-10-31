@@ -74,9 +74,14 @@ const GiftCardPage: React.FC = () => {
               onChange={(e) => setAmount(Number(e.target.value))} // Garante que o amount seja um número
               className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
             >
-              <option value={25}>$25</option>
-              <option value={50}>$50</option>
-              <option value={100}>$100</option>
+              <option value={25}>£ 25.00</option>
+              <option value={50}>£ 50.00</option>
+              <option value={100}>£ 100.00</option>
+              <option value={200}>£ 200.00</option>
+              <option value={250}>£ 250.00</option>
+              <option value={300}>£ 300.00</option>
+              <option value={350}>£ 350.00</option>
+              <option value={400}>£ 400.00</option>
             </select>
           </div>
 
