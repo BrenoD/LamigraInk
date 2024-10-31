@@ -75,8 +75,13 @@ const ParallaxSection: React.FC<ParallaxSectionProps> = ({ onGalleryClick }) => 
     <section 
       ref={sectionRef}
       className="parallax-section font-sans"
+      aria-hidden="true"
+      onTouchMove={(e) => e.preventDefault()}
     >
-      <div className="overlay"></div>
+      <div 
+        className="overlay"
+        aria-hidden="true"
+      ></div>
 
       <div className="content-wrapper">
         <div className="text-container">

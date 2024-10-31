@@ -8,6 +8,9 @@
   background-size: cover;
   background-attachment: fixed;
   background-position: top;
+  overflow: hidden;
+  touch-action: none;
+  pointer-events: none;
 }
 
 .overlay {
@@ -18,7 +21,8 @@
 
 .content-wrapper {
   position: relative;
-  z-index: 10;
+  z-index: 2;
+  pointer-events: auto;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -131,5 +135,11 @@
   .cta-button {
     padding: 0.625rem 1.25rem;
     font-size: 0.875rem;
+  }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .parallax-section {
+    background-attachment: scroll;
   }
 }

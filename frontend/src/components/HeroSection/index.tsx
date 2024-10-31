@@ -20,6 +20,13 @@ const HeroSection: React.FC = () => {
         autoPlay
         loop
         muted
+        playsInline
+        controls={false}
+        style={{ 
+          pointerEvents: 'none',
+          userSelect: 'none',
+          WebkitTouchCallout: 'none'
+        }}
       />
 
       <div className="absolute inset-0 bg-black opacity-30"></div>

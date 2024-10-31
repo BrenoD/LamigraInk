@@ -3,9 +3,24 @@ import Link from 'next/link';
 
 const ArtistSection: React.FC = () => {
   const artists = [
-    { id: 1, name: 'Moises Alves', imageUrl: 'artists/moises-perfil-400px.webp' },
-    { id: 2, name: 'Megan', imageUrl: 'https://ledstattoo.com.br/templates/yootheme/cache/Andressa-fd85f811.webp' },
-    { id: 3, name: 'Vini Capobianco', imageUrl: 'https://ledstattoo.com.br/templates/yootheme/cache/Sergio-Maciel-751c3c5b.webp' },
+    { 
+      id: 1, 
+      name: 'Moises Alves', 
+      imageUrl: 'artists/moises-perfil-400px.webp',
+      slug: 'moises-alves'
+    },
+    { 
+      id: 2, 
+      name: 'Megan', 
+      imageUrl: 'artists/Megan.webp',
+      slug: 'megan'
+    },
+    { 
+      id: 3, 
+      name: 'Vini Capobianco', 
+      imageUrl: 'artists/Vini.webp',
+      slug: 'vini-capobianco'
+    },
   ];
 
   return (
@@ -21,7 +36,11 @@ const ArtistSection: React.FC = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 px-4 sm:px-6 md:px-8 lg:px-12">
           {artists.map((artist) => (
-            <div key={artist.id} className="relative overflow-hidden rounded-lg shadow-lg group max-w-[300px] mx-auto w-full">
+            <Link 
+              key={artist.id} 
+              href={`/our-artists/${artist.slug}`}
+              className="relative overflow-hidden rounded-lg shadow-lg group max-w-[300px] mx-auto w-full cursor-pointer"
+            >
               <div className="h-[300px] md:h-[300px] flex items-center justify-center overflow-hidden">
                 <img
                   src={artist.imageUrl}
@@ -33,7 +52,7 @@ const ArtistSection: React.FC = () => {
                   <h3 className="font-semibold text-base md:text-lg whitespace-nowrap">{artist.name}</h3>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
 

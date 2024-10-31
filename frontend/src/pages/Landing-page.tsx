@@ -104,9 +104,6 @@ export default function LandingPage() {
       <div ref={aftercareRef}>
         <AftercareSection />
       </div>
-      <div ref={placementRef}>
-        <Parallax onGalleryClick={() => scrollToSection(galleryRef)} />
-      </div>
       <div ref={bookingRef}>
         <BookingFeeSection />
       </div>

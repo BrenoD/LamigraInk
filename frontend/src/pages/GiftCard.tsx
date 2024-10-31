@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import Footer from "@/components/Footer";
 import "./Dashboard.css";
+import { useGiftCard } from '../context/GiftCardContext';
 
 const GiftCardPage: React.FC = () => {
   const [amount, setAmount] = useState<number>(50);
@@ -10,6 +11,7 @@ const GiftCardPage: React.FC = () => {
   const [recipientName, setRecipientName] = useState<string>("");
   const [message, setMessage] = useState<string>("");
   const router = useRouter();
+  const { setGiftCardData } = useGiftCard();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,15 +21,14 @@ const GiftCardPage: React.FC = () => {
       return;
     }
 
-    router.push({
-      pathname: "./Checkout",
-      query: {
-        amount: amount,
-        recipientName: recipientName,
-        recipientEmail: recipientEmail,
-        message: message,
-      },
+    setGiftCardData({
+      amount,
+      recipientName,
+      recipientEmail,
+      message
     });
+
+    router.push("/Checkout");
   };
 
   return (
@@ -58,7 +59,7 @@ const GiftCardPage: React.FC = () => {
                 value={recipientName}
                 onChange={(e) => setRecipientName(e.target.value)}
                 required
-                className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-gray-900"
                 placeholder="Enter recipient's name"
               />
             </div>
@@ -72,7 +73,7 @@ const GiftCardPage: React.FC = () => {
                 value={recipientEmail}
                 onChange={(e) => setRecipientEmail(e.target.value)}
                 required
-                className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-gray-900"
                 placeholder="Enter recipient's email"
               />
             </div>
@@ -83,8 +84,8 @@ const GiftCardPage: React.FC = () => {
               </label>
               <select
                 value={amount}
-                onChange={(e) => setAmount(Number(e.target.value))}
-                className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                onChange={(e) => setAmount(parseInt(e.target.value))}
+                className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-gray-900"
               >
                 <option value={25}>£ 25.00</option>
                 <option value={50}>£ 50.00</option>
@@ -104,7 +105,7 @@ const GiftCardPage: React.FC = () => {
               <textarea
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-gray-900"
                 placeholder="Write a message (optional)"
                 rows={4}
               />

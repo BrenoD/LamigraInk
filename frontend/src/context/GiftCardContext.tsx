@@ -31,8 +31,8 @@ export const GiftCardProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
 export const useGiftCard = () => {
   const context = useContext(GiftCardContext);
-  if (!context) {
-    throw new Error('useGiftCard deve ser usado dentro de um GiftCardProvider');
+  if (context === undefined) {
+    throw new Error('useGiftCard must be used within a GiftCardProvider');
   }
   return context;
 }; 
