@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements, useStripe, useElements, CardNumberElement, CardCvcElement, CardExpiryElement } from "@stripe/react-stripe-js";
-import { useRouter } from "next/router";
+// import { useRouter } from "next/router";
 import "./Dashboard.css";
 import { useGiftCard } from '../context/GiftCardContext';
 

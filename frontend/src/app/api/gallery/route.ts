@@ -28,13 +28,13 @@ export async function GET(request: Request) {
       return new Response(JSON.stringify(galleryFiles), {
         headers: { 'Content-Type': 'application/json' },
       });
-    } catch (_) {
+    } catch {
       // Se a pasta não existir, retorna array vazio
       return new Response(JSON.stringify([]), {
         headers: { 'Content-Type': 'application/json' },
       });
     }
-  } catch (_) {
+  } catch {
     return new Response('Error reading gallery', { status: 500 });
   }
 } 
