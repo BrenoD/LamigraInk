@@ -1,6 +1,7 @@
+import { AppProps } from 'next/app';
 import { GiftCardProvider } from '../context/GiftCardContext';
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps }: AppProps) {
   return (
     <GiftCardProvider>
       <Component {...pageProps} />
@@ -8,4 +9,4 @@ function MyApp({ Component, pageProps }) {
   );
 }
 
-export default MyApp; 
+export default MyApp;
