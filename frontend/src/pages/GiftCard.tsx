@@ -3,22 +3,22 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import Footer from "@/components/Footer";
 import "./Dashboard.css";
-import { useGiftCard } from '../context/GiftCardContext';
+import { useGiftCard } from "../context/GiftCardContext";
 
 const GiftCardPage: React.FC = () => {
   const [amount, setAmount] = useState<number>(50);
   const [recipientEmail, setRecipientEmail] = useState<string>("");
   const [recipientName, setRecipientName] = useState<string>("");
   const [message, setMessage] = useState<string>("");
-  const [SelectArtist, setArtist] = useState<string>("");
+  const [selectArtist, setSelectedArtist] = useState<string>(""); // Armazena a escolha do tatuador
   const router = useRouter();
   const { setGiftCardData } = useGiftCard();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!recipientEmail || !recipientName) {
-      alert("Preencha o nome e o email do destinatário.");
+    if (!recipientEmail || !recipientName || !selectArtist) { // Verifica se o tatuador foi selecionado
+      alert("Preencha o nome, o email do destinatário e escolha o tatuador.");
       return;
     }
 
@@ -26,10 +26,11 @@ const GiftCardPage: React.FC = () => {
       amount,
       recipientName,
       recipientEmail,
-      message
+      message,
+      selectArtist, // Inclui o tatuador escolhido no contexto
     });
 
-    router.push("/Checkout");
+    router.push("/Checkout"); // Redireciona para a página de checkout
   };
 
   return (
@@ -110,16 +111,24 @@ const GiftCardPage: React.FC = () => {
                 placeholder="Write a message (optional)"
                 rows={4}
               />
+            </div>
+
+            <div>
               <label className="block text-sm font-medium text-gray-700">
-                Select Artist
+                Select Your Tattooist
               </label>
-              <textarea
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
+              <select
+                id="tattoo-artist"
+                value={selectArtist}
+                onChange={(e) => setSelectedArtist(e.target.value)}
+                required
                 className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-gray-900"
-                placeholder="Write your favorite Artist"
-                rows={4}
-              />
+              >
+                <option value="">Select your tattooist</option>
+                <option value="moises">Moisés</option>
+                <option value="megan">Megan</option>
+                <option value="vini">Vini</option>
+              </select>
             </div>
 
             <button

@@ -5,6 +5,7 @@ interface GiftCardData {
   recipientName: string;
   recipientEmail: string;
   message: string;
+  selectArtist: string
 }
 
 interface GiftCardContextType {
@@ -19,7 +20,8 @@ export const GiftCardProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     amount: 50,
     recipientName: '',
     recipientEmail: '',
-    message: ''
+    message: '',
+    selectArtist: '',
   });
 
   return (
