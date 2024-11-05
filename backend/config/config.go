@@ -16,7 +16,7 @@ var DB *sql.DB
 // Função para inicializar a chave do Stripe
 func InitStripe() {
 	// Carrega o arquivo .env
-	err := godotenv.Load() // Isso precisa ser chamado antes de acessar as variáveis de ambiente
+	err := godotenv.Load()
 	if err != nil {
 		log.Fatalf("Erro ao carregar o arquivo .env: %v", err)
 	}
@@ -30,7 +30,7 @@ func InitStripe() {
 
 // Função para abrir a conexão com o banco de dados
 func OpenConn() error {
-	// Carrega as variáveis de ambiente novamente
+	// Carrega as variáveis de ambiente
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatalf("Erro ao carregar o arquivo .env: %v", err)
@@ -61,5 +61,25 @@ func CloseConn() error {
 	if DB != nil {
 		return DB.Close()
 	}
+	return nil
+}
+
+// Função para inicializar o banco de dados e criar a tabela 'giftcards' se não existir
+func InitializeDatabase() error {
+	// Verifica se a tabela 'giftcards' existe
+	query := `
+		CREATE TABLE IF NOT EXISTS giftcards (
+			id SERIAL PRIMARY KEY,
+			code VARCHAR(255) NOT NULL,
+			value NUMERIC(10, 2) NOT NULL,
+			status VARCHAR(50) NOT NULL
+		);
+	`
+
+	_, err := DB.Exec(query)
+	if err != nil {
+		return fmt.Errorf("Erro ao criar tabela 'giftcards': %v", err)
+	}
+
 	return nil
 }

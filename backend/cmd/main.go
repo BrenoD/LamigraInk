@@ -25,6 +25,11 @@ func main() {
 		}
 	}()
 
+	// Initialize database (create tables if they don't exist)
+	if err := config.InitializeDatabase(); err != nil {
+		log.Fatalf("Failed to initialize database: %v", err)
+	}
+
 	// Initialize Gin router
 	router := gin.Default()
 

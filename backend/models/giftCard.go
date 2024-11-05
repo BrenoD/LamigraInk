@@ -11,4 +11,5 @@ type GiftcardRequest struct {
     RecipientName string  `json:"recipientname"`
 	Email         string  `json:"email"`
     Value        float32 `json:"value"`
+    Artist       string `json:"artist"`
 }

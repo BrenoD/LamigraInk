@@ -35,7 +35,8 @@ const CheckoutForm: React.FC = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ 
-          value: giftCardData.amount
+          value: giftCardData.amount,
+          artist: giftCardData.selectArtist,
         }), 
       });
       
@@ -68,7 +69,8 @@ const CheckoutForm: React.FC = () => {
           body: JSON.stringify({
             recipientname: giftCardData.recipientName,
             email: giftCardData.recipientEmail,
-            value: giftCardData.amount
+            value: giftCardData.amount,
+            artist: giftCardData.selectArtist,
           }),
         });
 
