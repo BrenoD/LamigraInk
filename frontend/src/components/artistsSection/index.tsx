@@ -20,7 +20,7 @@ const ArtistSection: React.FC = () => {
     { 
       id: 3, 
       name: 'Vini Capobianco', 
-      imageUrl: 'artists/Vini.webp',
+      imageUrl: 'artists/vini.webp',
       slug: 'vini-capobianco',
       numberContact: '7939587766'
     },

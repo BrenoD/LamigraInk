@@ -33,26 +33,34 @@ func OpenConn() error {
 	// Carrega as variáveis de ambiente
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatalf("Erro ao carregar o arquivo .env: %v", err)
+		log.Printf("Aviso: Arquivo .env não encontrado, usando variáveis de ambiente do sistema")
 	}
 
-	// Obter os valores das variáveis de ambiente
+	// Tenta primeiro usar DATABASE_URL (fornecido pelo Railway)
+	dbURL := os.Getenv("DATABASE_URL")
+	if dbURL != "" {
+		DB, err = sql.Open("postgres", dbURL)
+		if err != nil {
+			return err
+		}
+		return DB.Ping()
+	}
+
+	// Se não houver DATABASE_URL, usa as variáveis individuais
 	dbUser := os.Getenv("DB_USER")
 	dbPassword := os.Getenv("DB_PASSWORD")
 	dbName := os.Getenv("DB_NAME")
 	dbHost := os.Getenv("DB_HOST")
 	dbPort := os.Getenv("DB_PORT")
 
-	// Cria a string de conexão
-	connStr := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", dbHost, dbPort, dbUser, dbPassword, dbName)
+	connStr := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=require",
+		dbHost, dbPort, dbUser, dbPassword, dbName)
 
-	// Abre a conexão com o banco de dados
 	DB, err = sql.Open("postgres", connStr)
 	if err != nil {
 		return err
 	}
 
-	// Verifica se a conexão foi bem-sucedida
 	return DB.Ping()
 }
 
