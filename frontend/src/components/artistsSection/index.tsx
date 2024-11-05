@@ -1,25 +1,34 @@
 import React from 'react';
 import Link from 'next/link';
 
+function getWhatsAppLink(number: string): string {
+  const message = "Hello! I would like to know more about the prices and the estimated time for a custom tattoo. Could you help me?";
+  const encodedMessage = encodeURIComponent(message);
+  return `https://wa.me/${number}?text=${encodedMessage}`;
+}
+
 const ArtistSection: React.FC = () => {
   const artists = [
     { 
       id: 1, 
       name: 'Moises Alves', 
       imageUrl: 'artists/moises-perfil-400px.webp',
-      slug: 'moises-alves'
+      slug: 'moises-alves',
+      numberContact: '7491282294'
     },
-    { 
+    {
       id: 2, 
       name: 'Megan', 
       imageUrl: 'artists/Megan.webp',
-      slug: 'megan'
+      slug: 'megan',
+      numberContact: '111111111'
     },
     { 
       id: 3, 
       name: 'Vini Capobianco', 
       imageUrl: 'artists/Vini.webp',
-      slug: 'vini-capobianco'
+      slug: 'vini-capobianco',
+      numberContact: '7939587766'
     },
   ];
 
@@ -36,23 +45,31 @@ const ArtistSection: React.FC = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 px-4 sm:px-6 md:px-8 lg:px-12">
           {artists.map((artist) => (
-            <Link 
-              key={artist.id} 
-              href={`/our-artists/${artist.slug}`}
-              className="relative overflow-hidden rounded-lg shadow-lg group max-w-[300px] mx-auto w-full cursor-pointer"
-            >
-              <div className="h-[300px] md:h-[300px] flex items-center justify-center overflow-hidden">
-                <img
-                  src={artist.imageUrl}
-                  alt={artist.name}
-                  className="w-full h-full object-top transition duration-300 grayscale group-hover:grayscale-0 transform group-hover:scale-105"
-                  loading="lazy"
-                />
-                <div className="absolute bottom-6 md:bottom-10 left-1/2 transform -translate-x-1/2 bg-[#a68d7a] bg-opacity-70 text-white px-4 py-2 rounded-sm">
-                  <h3 className="font-semibold text-base md:text-lg whitespace-nowrap">{artist.name}</h3>
+            <div key={artist.id} className="relative overflow-hidden rounded-lg shadow-lg group max-w-[300px] mx-auto w-full cursor-pointer">
+              <Link href={`/our-artists/${artist.slug}`}>
+                <div className="h-[300px] md:h-[300px] flex items-center justify-center overflow-hidden">
+                  <img
+                    src={artist.imageUrl}
+                    alt={artist.name}
+                    className="w-full h-full object-top transition duration-300 grayscale group-hover:grayscale-0 transform group-hover:scale-105"
+                    loading="lazy"
+                  />
+                  <div className="absolute bottom-6 md:bottom-10 left-1/2 transform -translate-x-1/2 bg-[#a68d7a] bg-opacity-70 text-white px-4 py-2 rounded-sm">
+                    <h3 className="font-semibold text-base md:text-lg whitespace-nowrap">{artist.name}</h3>
+                  </div>
                 </div>
-              </div>
-            </Link>
+              </Link>
+              {/* <div className="flex justify-center mt-4">
+                <a
+                  href={getWhatsAppLink(artist.numberContact)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block px-4 py-2 rounded-sm bg-green-500 text-white hover:bg-green-600 transition duration-300 text-sm font-medium"
+                >
+                  Contact via WhatsApp
+                </a>
+              </div> */}
+            </div>
           ))}
         </div>
 

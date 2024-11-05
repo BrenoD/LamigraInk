@@ -6,7 +6,15 @@ export interface Artist {
   gallery: string[];
   experience?: string;
   specialities: string[];
+  numberContact: string
 }
+
+function getWhatsAppLink(number: string): string {
+  const message = "Hello! I would like to know more about the prices and the estimated time for a custom tattoo. Could you guys help me?";
+  const encodedMessage = encodeURIComponent(message);
+  return `https://wa.me/${number}?text=${encodedMessage}`;
+}
+
 
 export const artistsData: Artist[] = [
   {
@@ -16,7 +24,8 @@ export const artistsData: Artist[] = [
     profileImage: '/artists/moises-perfil-400px.webp',
     gallery: [],
     experience: '10',
-    specialities: ['Blackwork', 'Realism', 'Oriental']
+    specialities: ['Blackwork', 'Realism', 'Oriental'],
+    numberContact: '+44749282294'
   },
   {
     id: 'megan',
@@ -25,7 +34,8 @@ export const artistsData: Artist[] = [
     description: 'Artist specialising in watercolour and minimalist designs. Internationally awarded.',
     gallery: [], // Will be populated dynamically
     experience: '10',
-    specialities: ['Watercolour', 'Minimalist']
+    specialities: ['Watercolour', 'Minimalist'],
+    numberContact: '111111111'
   },
   {
     id: 'vini-capobianco',
@@ -34,7 +44,8 @@ export const artistsData: Artist[] = [
     description: 'Master in oriental tattoos and complex geometric designs.',
     gallery: [], // Will be populated dynamically
     experience: '10',
-    specialities: ['Oriental', 'Geometric']
+    specialities: ['Oriental', 'Geometric'],
+    numberContact: '+447939587766'
   },
 ];
 
@@ -46,7 +57,7 @@ export async function loadArtistGallery(artistId: string) {
       throw new Error('Failed to load gallery');
     }
     const gallery = await response.json();
-    
+
     // Updates the artist's gallery
     const artist = artistsData.find(a => a.id === artistId);
     if (artist) {
