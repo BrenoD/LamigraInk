@@ -9,11 +9,11 @@ export interface Artist {
   numberContact: string
 }
 
-function getWhatsAppLink(number: string): string {
-  const message = "Hello! I would like to know more about the prices and the estimated time for a custom tattoo. Could you guys help me?";
-  const encodedMessage = encodeURIComponent(message);
-  return `https://wa.me/${number}?text=${encodedMessage}`;
-}
+// function getWhatsAppLink(number: string): string {
+//   const message = "Hello! I would like to know more about the prices and the estimated time for a custom tattoo. Could you guys help me?";
+//   const encodedMessage = encodeURIComponent(message);
+//   return `https://wa.me/${number}?text=${encodedMessage}`;
+// }
 
 
 export const artistsData: Artist[] = [

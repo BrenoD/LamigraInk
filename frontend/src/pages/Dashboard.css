@@ -46,3 +46,17 @@
     transform: translateY(-10px);
   }
 }
+
+
+@keyframes slideOutLeft {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.loading-animation {
+  animation: slideOutLeft 1s ease-in-out forwards;
+}

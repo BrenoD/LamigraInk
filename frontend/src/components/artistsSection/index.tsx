@@ -1,12 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
 
-function getWhatsAppLink(number: string): string {
-  const message = "Hello! I would like to know more about the prices and the estimated time for a custom tattoo. Could you help me?";
-  const encodedMessage = encodeURIComponent(message);
-  return `https://wa.me/${number}?text=${encodedMessage}`;
-}
-
 const ArtistSection: React.FC = () => {
   const artists = [
     { 
@@ -59,16 +53,6 @@ const ArtistSection: React.FC = () => {
                   </div>
                 </div>
               </Link>
-              {/* <div className="flex justify-center mt-4">
-                <a
-                  href={getWhatsAppLink(artist.numberContact)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block px-4 py-2 rounded-sm bg-green-500 text-white hover:bg-green-600 transition duration-300 text-sm font-medium"
-                >
-                  Contact via WhatsApp
-                </a>
-              </div> */}
             </div>
           ))}
         </div>
