@@ -20,7 +20,7 @@ const ChatPopup: React.FC<ChatPopupProps> = ({ roomId, userType, onClose }) => {
 
   useEffect(() => {
     if (roomId) {
-      const ws = new WebSocket(`wss://lamigraink-production-4e5f.up.railway.app/ws?type=${userType}&room=${roomId}`);
+      const ws = new WebSocket(`${process.env.NEXT_PUBLIC_BACKEND_API_WS}?type=${userType}&room=${roomId}`);
 
       ws.onopen = () => {
         console.log("Conexão WebSocket estabelecida. Room ID:", roomId, "User Type:", userType);

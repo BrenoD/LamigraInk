@@ -29,7 +29,7 @@ const CheckoutForm: React.FC = () => {
         throw new Error("Card elements not found");
       }
 
-      const response = await fetch(`${process.env.BACKEND_API}/create-payment-intent`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/create-payment-intent`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
