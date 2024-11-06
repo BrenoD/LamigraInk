@@ -34,7 +34,7 @@ func InitializeDatabase() error {
 	// Defina as instruções SQL para criar as tabelas e gatilhos individualmente
 	tables := []string{
 		`
-		CREATE TABLE IF NOT EXISTS Users (
+		CREATE TABLE IF NOT EXISTS users (
 			user_id SERIAL PRIMARY KEY,
 			username VARCHAR(255) NOT NULL,
 			password_hash VARCHAR(255) NOT NULL,
@@ -44,7 +44,7 @@ func InitializeDatabase() error {
 		);
 		`,
 		`
-		CREATE TABLE IF NOT EXISTS Rooms (
+		CREATE TABLE IF NOT EXISTS rooms (
 			room_id SERIAL PRIMARY KEY,
 			room_name VARCHAR(255),
 			created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
@@ -52,24 +52,24 @@ func InitializeDatabase() error {
 		);
 		`,
 		`
-		CREATE TABLE IF NOT EXISTS RoomMembers (
+		CREATE TABLE IF NOT EXISTS room_members (
 			room_id INT,
 			user_id INT,
 			joined_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 			PRIMARY KEY (room_id, user_id),
-			FOREIGN KEY (room_id) REFERENCES Rooms(room_id),
-			FOREIGN KEY (user_id) REFERENCES Users(user_id)
+			FOREIGN KEY (room_id) REFERENCES rooms(room_id),
+			FOREIGN KEY (user_id) REFERENCES users(user_id)
 		);
 		`,
 		`
-		CREATE TABLE IF NOT EXISTS Messages (
+		CREATE TABLE IF NOT EXISTS messages (
 			message_id SERIAL PRIMARY KEY,
 			room_id INT,
 			sender_id INT,
 			content TEXT NOT NULL,
 			sent_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-			FOREIGN KEY (room_id) REFERENCES Rooms(room_id),
-			FOREIGN KEY (sender_id) REFERENCES Users(user_id)
+			FOREIGN KEY (room_id) REFERENCES rooms(room_id),
+			FOREIGN KEY (sender_id) REFERENCES users(user_id)
 		);
 		`,
 		`
@@ -92,9 +92,9 @@ func InitializeDatabase() error {
 		$$ LANGUAGE plpgsql;
 		`,
 		`
-		DROP TRIGGER IF EXISTS update_users_modified_time ON Users;
+		DROP TRIGGER IF EXISTS update_users_modified_time ON users;
 		CREATE TRIGGER update_users_modified_time
-		BEFORE UPDATE ON Users
+		BEFORE UPDATE ON users
 		FOR EACH ROW
 		EXECUTE PROCEDURE update_modified_column();
 		`,
