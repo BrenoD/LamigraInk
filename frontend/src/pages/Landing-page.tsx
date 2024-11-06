@@ -59,7 +59,7 @@ export default function LandingPage() {
       setRoomId(newRoomId);
 
       // Registra o chat como ativo no backend
-      fetch(`${process.env.BACKEND}/active-chats`, {
+      fetch(`${process.env.BACKEND_API}/active-chats`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
