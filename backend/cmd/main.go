@@ -54,7 +54,7 @@ func main() {
 	} else if os.Getenv("RAILWAY_ENVIRONMENT") != "" {
 		corsConfig.AllowOrigins = []string{
 			"https://lamigra-ink.vercel.app/",
-			/* "https://seu-frontend-url.railway.app", */
+			/* "https://seu-frontend-url.railway.app    aa", */
 		}
 	} else {
 		corsConfig.AllowOrigins = []string{"http://localhost:3000"}
