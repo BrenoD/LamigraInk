@@ -6,7 +6,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strings"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -48,21 +47,38 @@ func main() {
 
 	// Configure CORS
 	corsConfig := cors.DefaultConfig()
-	allowedOrigins := os.Getenv("ALLOWED_ORIGINS")
-	if allowedOrigins != "" {
-		corsConfig.AllowOrigins = strings.Split(allowedOrigins, ",")
-	} else if os.Getenv("RAILWAY_ENVIRONMENT") != "" {
-		corsConfig.AllowOrigins = []string{
-			"https://lamigra-ink.vercel.app",
-			/* "https://seu-frontend-url.railway.app    aa", */
-		}
-	} else {
-		corsConfig.AllowOrigins = []string{"http://localhost:3000"}
+	corsConfig.AllowOrigins = []string{
+		"https://lamigra-ink.vercel.app",
+		"http://localhost:3000",
 	}
 	corsConfig.AllowMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
-	corsConfig.AllowHeaders = []string{"Origin", "Content-Type", "Accept", "Authorization"}
+	corsConfig.AllowHeaders = []string{
+		"Origin",
+		"Content-Type",
+		"Accept",
+		"Authorization",
+		"X-Requested-With",
+	}
+	corsConfig.AllowCredentials = true
+	corsConfig.ExposeHeaders = []string{"Content-Length"}
+	corsConfig.MaxAge = 12 * 60 * 60 // 12 horas em segundos
 
 	router.Use(cors.New(corsConfig))
+
+	// Middleware personalizado para adicionar headers CORS em todas as respostas
+	router.Use(func(c *gin.Context) {
+		c.Header("Access-Control-Allow-Origin", "https://lamigra-ink.vercel.app")
+		c.Header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+		c.Header("Access-Control-Allow-Headers", "Origin, Content-Type, Accept, Authorization, X-Requested-With")
+		c.Header("Access-Control-Allow-Credentials", "true")
+		
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(204)
+			return
+		}
+		
+		c.Next()
+	})
 
 	// Routes
 	router.POST("/gift-card", handlers.ProcessGiftCardCreationAndSendEmailHandler)

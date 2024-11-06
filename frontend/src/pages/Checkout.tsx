@@ -29,15 +29,17 @@ const CheckoutForm: React.FC = () => {
         throw new Error("Card elements not found");
       }
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/create-payment-intent`, {
-        method: "POST",
+      const response = await fetch('https://lamigraink-production-4e5f.up.railway.app/create-payment-intent', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
         },
-        body: JSON.stringify({ 
+        credentials: 'include',
+        body: JSON.stringify({
           value: giftCardData.amount,
           artist: giftCardData.selectArtist,
-        }), 
+        }),
       });
       
       if (!response.ok) {
