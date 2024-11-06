@@ -1,5 +1,10 @@
 "use client";
 
+
+const apiUrl = process.env.BACKEND_API
+
+
+
 import { FaComment } from "react-icons/fa6";
 import Image from "next/image"
 import { useState, useEffect, useRef } from 'react';
