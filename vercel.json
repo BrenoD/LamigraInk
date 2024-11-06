@@ -1,5 +1,5 @@
 {
-  "rootDirectory": "frontend",
+  "rootDirectory": "/frontend",
   "builds": [
     {
       "src": "frontend/package.json",
