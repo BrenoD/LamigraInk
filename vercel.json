@@ -6,5 +6,5 @@
   "build": {
     "command": "cd frontend && npm run build"
   },
-  "framework": "nextjs"
+  "framework": "next"
 }
