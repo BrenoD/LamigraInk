@@ -2,5 +2,9 @@
   "env": {
     "BACKEND_API": "https://lamigraink-production-4e5f.up.railway.app/",
     "BACKEND_API_WS": "https://lamigraink-production-4e5f.up.railway.app/ws"
-  }
+  },
+  "build": {
+    "command": "cd frontend && npm run build"
+  },
+  "framework": "nextjs"
 }
