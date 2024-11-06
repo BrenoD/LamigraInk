@@ -25,7 +25,7 @@ const carouselImages = [
   'https://t4.ftcdn.net/jpg/07/32/21/35/360_F_732213522_Od8FD6XBPgYmHKtJByVoJaiL8miY2QoN.jpg',
   'https://t4.ftcdn.net/jpg/07/32/21/35/360_F_732213522_Od8FD6XBPgYmHKtJByVoJaiL8miY2QoN.jpg',
 ];
-const apiUrl = process.env.BACKEND_API
+// const apiUrl = process.env.BACKEND_API
 
 // Função para gerar um Room ID aleatório
 const generateRoomId = () => {
