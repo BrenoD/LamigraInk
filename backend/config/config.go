@@ -104,7 +104,7 @@ func InitializeDatabase() error {
 		BEFORE UPDATE ON giftcards
 		FOR EACH ROW
 		EXECUTE PROCEDURE update_modified_column();
-		`
+		`,
 	}
 
 	// Executa cada instrução SQL separadamente
