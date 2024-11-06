@@ -35,58 +35,76 @@ func InitializeDatabase() error {
 	tables := []string{
 		`
 		CREATE TABLE IF NOT EXISTS Users (
-			UserID SERIAL PRIMARY KEY,
-			Username VARCHAR(255) NOT NULL,
-			PasswordHash VARCHAR(255) NOT NULL,
-			UserRole VARCHAR(50) NOT NULL,
-			CreatedAt TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-			UpdatedAt TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP
+			user_id SERIAL PRIMARY KEY,
+			username VARCHAR(255) NOT NULL,
+			password_hash VARCHAR(255) NOT NULL,
+			user_role VARCHAR(50) NOT NULL,
+			created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+			updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP
 		);
 		`,
 		`
 		CREATE TABLE IF NOT EXISTS Rooms (
-			RoomID SERIAL PRIMARY KEY,
-			RoomName VARCHAR(255),
-			CreatedAt TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-			IsActive BOOLEAN DEFAULT TRUE
+			room_id SERIAL PRIMARY KEY,
+			room_name VARCHAR(255),
+			created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+			is_active BOOLEAN DEFAULT TRUE
 		);
 		`,
 		`
 		CREATE TABLE IF NOT EXISTS RoomMembers (
-			RoomID INT,
-			UserID INT,
-			JoinedAt TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-			PRIMARY KEY (RoomID, UserID),
-			FOREIGN KEY (RoomID) REFERENCES Rooms(RoomID),
-			FOREIGN KEY (UserID) REFERENCES Users(UserID)
+			room_id INT,
+			user_id INT,
+			joined_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+			PRIMARY KEY (room_id, user_id),
+			FOREIGN KEY (room_id) REFERENCES Rooms(room_id),
+			FOREIGN KEY (user_id) REFERENCES Users(user_id)
 		);
 		`,
 		`
 		CREATE TABLE IF NOT EXISTS Messages (
-			MessageID SERIAL PRIMARY KEY,
-			RoomID INT,
-			SenderID INT,
-			Content TEXT NOT NULL,
-			SentAt TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-			FOREIGN KEY (RoomID) REFERENCES Rooms(RoomID),
-			FOREIGN KEY (SenderID) REFERENCES Users(UserID)
+			message_id SERIAL PRIMARY KEY,
+			room_id INT,
+			sender_id INT,
+			content TEXT NOT NULL,
+			sent_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+			FOREIGN KEY (room_id) REFERENCES Rooms(room_id),
+			FOREIGN KEY (sender_id) REFERENCES Users(user_id)
+		);
+		`,
+		`
+		CREATE TABLE IF NOT EXISTS giftcards (
+			id SERIAL PRIMARY KEY,
+			code VARCHAR(255) NOT NULL UNIQUE,
+			value DECIMAL(10,2) NOT NULL,
+			status VARCHAR(50) NOT NULL DEFAULT 'active',
+			created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+			updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP
 		);
 		`,
 		`
 		CREATE OR REPLACE FUNCTION update_modified_column()
 		RETURNS TRIGGER AS $$
 		BEGIN
-			NEW.UpdatedAt = NOW();
-			RETURN NEW;
+				NEW.updated_at = NOW();
+				RETURN NEW;
 		END;
 		$$ LANGUAGE plpgsql;
 		`,
 		`
-		CREATE TRIGGER IF NOT EXISTS UpdateUsersModifiedTime
+		DROP TRIGGER IF EXISTS update_users_modified_time ON Users;
+		CREATE TRIGGER update_users_modified_time
 		BEFORE UPDATE ON Users
 		FOR EACH ROW
 		EXECUTE PROCEDURE update_modified_column();
 		`,
+		`
+		DROP TRIGGER IF EXISTS update_giftcards_modified_time ON giftcards;
+		CREATE TRIGGER update_giftcards_modified_time
+		BEFORE UPDATE ON giftcards
+		FOR EACH ROW
+		EXECUTE PROCEDURE update_modified_column();
+		`
 	}
 
 	// Executa cada instrução SQL separadamente
