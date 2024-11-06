@@ -31,64 +31,69 @@ func CheckDBConnection() {
 }
 
 func InitializeDatabase() error {
-	// Exemplo simples de inicialização de banco de dados, como criar tabelas
-	// Aqui você pode adicionar suas tabelas ou outras inicializações do banco
-	_, err := DB.Exec(`
-		-- Criação de Tabelas
-CREATE TABLE Users (
-    UserID SERIAL PRIMARY KEY,
-    Username VARCHAR(255) NOT NULL,
-    PasswordHash VARCHAR(255) NOT NULL,
-    UserRole VARCHAR(50) NOT NULL,
-    CreatedAt TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    UpdatedAt TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP
-);
+	// Defina as instruções SQL para criar as tabelas e gatilhos individualmente
+	tables := []string{
+		`
+		CREATE TABLE IF NOT EXISTS Users (
+			UserID SERIAL PRIMARY KEY,
+			Username VARCHAR(255) NOT NULL,
+			PasswordHash VARCHAR(255) NOT NULL,
+			UserRole VARCHAR(50) NOT NULL,
+			CreatedAt TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+			UpdatedAt TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP
+		);
+		`,
+		`
+		CREATE TABLE IF NOT EXISTS Rooms (
+			RoomID SERIAL PRIMARY KEY,
+			RoomName VARCHAR(255),
+			CreatedAt TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+			IsActive BOOLEAN DEFAULT TRUE
+		);
+		`,
+		`
+		CREATE TABLE IF NOT EXISTS RoomMembers (
+			RoomID INT,
+			UserID INT,
+			JoinedAt TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+			PRIMARY KEY (RoomID, UserID),
+			FOREIGN KEY (RoomID) REFERENCES Rooms(RoomID),
+			FOREIGN KEY (UserID) REFERENCES Users(UserID)
+		);
+		`,
+		`
+		CREATE TABLE IF NOT EXISTS Messages (
+			MessageID SERIAL PRIMARY KEY,
+			RoomID INT,
+			SenderID INT,
+			Content TEXT NOT NULL,
+			SentAt TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+			FOREIGN KEY (RoomID) REFERENCES Rooms(RoomID),
+			FOREIGN KEY (SenderID) REFERENCES Users(UserID)
+		);
+		`,
+		`
+		CREATE OR REPLACE FUNCTION update_modified_column()
+		RETURNS TRIGGER AS $$
+		BEGIN
+			NEW.UpdatedAt = NOW();
+			RETURN NEW;
+		END;
+		$$ LANGUAGE plpgsql;
+		`,
+		`
+		CREATE TRIGGER IF NOT EXISTS UpdateUsersModifiedTime
+		BEFORE UPDATE ON Users
+		FOR EACH ROW
+		EXECUTE PROCEDURE update_modified_column();
+		`,
+	}
 
-CREATE TABLE Rooms (
-    RoomID SERIAL PRIMARY KEY,
-    RoomName VARCHAR(255),
-    CreatedAt TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    IsActive BOOLEAN DEFAULT TRUE
-);
-
-CREATE TABLE RoomMembers (
-    RoomID INT,
-    UserID INT,
-    JoinedAt TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (RoomID, UserID),
-    FOREIGN KEY (RoomID) REFERENCES Rooms(RoomID),
-    FOREIGN KEY (UserID) REFERENCES Users(UserID)
-);
-
-CREATE TABLE Messages (
-    MessageID SERIAL PRIMARY KEY,
-    RoomID INT,
-    SenderID INT,
-    Content TEXT NOT NULL,
-    SentAt TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (RoomID) REFERENCES Rooms(RoomID),
-    FOREIGN KEY (SenderID) REFERENCES Users(UserID)
-);
-
-
--- Criação de Função e Gatilho
-CREATE OR REPLACE FUNCTION update_modified_column()
-RETURNS TRIGGER AS $$
-BEGIN
-    NEW.UpdatedAt = NOW();
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER UpdateUsersModifiedTime
-BEFORE UPDATE ON Users
-FOR EACH ROW
-EXECUTE PROCEDURE update_modified_column();
-
-	`)
-
-	if err != nil {
-		return fmt.Errorf("erro ao inicializar o banco de dados: %v", err)
+	// Executa cada instrução SQL separadamente
+	for _, table := range tables {
+		if _, err := DB.Exec(table); err != nil {
+			return fmt.Errorf("erro ao executar a instrução SQL: %v", err)
+		}
 	}
 
 	log.Println("Banco de dados inicializado com sucesso")
