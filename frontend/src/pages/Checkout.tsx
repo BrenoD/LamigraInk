@@ -29,7 +29,7 @@ const CheckoutForm: React.FC = () => {
         throw new Error("Card elements not found");
       }
 
-      const response = await fetch("http://localhost:8080/create-payment-intent", {
+      const response = await fetch(`${process.env.BACKEND}/create-payment-intent`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -61,7 +61,7 @@ const CheckoutForm: React.FC = () => {
       }
 
       if (paymentIntent?.status === "succeeded") {
-        const giftCardResponse = await fetch("http://localhost:8080/gift-card", {
+        const giftCardResponse = await fetch(`${process.env.BACKEND}/gift-card`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

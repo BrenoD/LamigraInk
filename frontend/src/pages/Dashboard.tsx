@@ -34,7 +34,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     // Fetch active chats
-    fetch('http://localhost:8080/active-chats')
+    fetch(`${process.env.BACKEND}/active-chats`)
       .then((res) => res.json())
       .then((data) => {
         // Generate a unique time for each chat
