@@ -50,6 +50,7 @@ func main() {
 	corsConfig.AllowOrigins = []string{
 		"https://lamigra-ink.vercel.app",
 		"http://localhost:3000",
+		"https://lamigra-ink-git-main-brenods-projects.vercel.app",
 	}
 	corsConfig.AllowMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
 	corsConfig.AllowHeaders = []string{
