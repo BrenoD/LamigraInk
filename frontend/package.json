@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "BACKEND_API=$BACKEND_API next build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "vercel-build": "npm run build"
