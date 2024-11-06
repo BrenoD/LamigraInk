@@ -33,6 +33,7 @@ func CheckDBConnection() {
 func InitializeDatabase() error {
 	// Defina as instruções SQL para criar as tabelas e gatilhos individualmente
 	tables := []string{
+		// Tabela de usuários
 		`
 		CREATE TABLE IF NOT EXISTS Users (
 			user_id SERIAL PRIMARY KEY,
@@ -43,6 +44,8 @@ func InitializeDatabase() error {
 			updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP
 		);
 		`,
+
+		// Tabela de salas
 		`
 		CREATE TABLE IF NOT EXISTS Rooms (
 			room_id SERIAL PRIMARY KEY,
@@ -51,6 +54,8 @@ func InitializeDatabase() error {
 			is_active BOOLEAN DEFAULT TRUE
 		);
 		`,
+
+		// Tabela de membros das salas com chaves estrangeiras para Rooms e Users
 		`
 		CREATE TABLE IF NOT EXISTS RoomMembers (
 			room_id INT,
@@ -61,6 +66,8 @@ func InitializeDatabase() error {
 			FOREIGN KEY (user_id) REFERENCES Users(user_id)
 		);
 		`,
+
+		// Tabela de mensagens com chaves estrangeiras para Rooms e Users
 		`
 		CREATE TABLE IF NOT EXISTS Messages (
 			message_id SERIAL PRIMARY KEY,
@@ -72,6 +79,8 @@ func InitializeDatabase() error {
 			FOREIGN KEY (sender_id) REFERENCES Users(user_id)
 		);
 		`,
+
+		// Tabela de giftcards
 		`
 		CREATE TABLE IF NOT EXISTS giftcards (
 			id SERIAL PRIMARY KEY,
@@ -82,15 +91,19 @@ func InitializeDatabase() error {
 			updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP
 		);
 		`,
+
+		// Função para atualizar a coluna "updated_at" nas tabelas Users e giftcards
 		`
 		CREATE OR REPLACE FUNCTION update_modified_column()
 		RETURNS TRIGGER AS $$
 		BEGIN
-				NEW.updated_at = NOW();
-				RETURN NEW;
+			NEW.updated_at = NOW();
+			RETURN NEW;
 		END;
 		$$ LANGUAGE plpgsql;
 		`,
+
+		// Trigger para atualizar "updated_at" na tabela Users
 		`
 		DROP TRIGGER IF EXISTS update_users_modified_time ON Users;
 		CREATE TRIGGER update_users_modified_time
@@ -98,6 +111,8 @@ func InitializeDatabase() error {
 		FOR EACH ROW
 		EXECUTE PROCEDURE update_modified_column();
 		`,
+
+		// Trigger para atualizar "updated_at" na tabela giftcards
 		`
 		DROP TRIGGER IF EXISTS update_giftcards_modified_time ON giftcards;
 		CREATE TRIGGER update_giftcards_modified_time
@@ -106,6 +121,7 @@ func InitializeDatabase() error {
 		EXECUTE PROCEDURE update_modified_column();
 		`,
 	}
+
 
 	// Executa cada instrução SQL separadamente
 	for _, table := range tables {
