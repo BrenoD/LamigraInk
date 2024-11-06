@@ -31,8 +31,25 @@ func CheckDBConnection() {
 }
 
 func InitializeDatabase() error {
-	// Defina as instruções SQL para criar as tabelas e gatilhos individualmente
+	// Primeiro, drop todas as tabelas existentes
+	dropTables := []string{
+		`DROP TABLE IF EXISTS messages CASCADE;`,
+		`DROP TABLE IF EXISTS room_members CASCADE;`,
+		`DROP TABLE IF EXISTS rooms CASCADE;`,
+		`DROP TABLE IF EXISTS users CASCADE;`,
+		`DROP TABLE IF EXISTS giftcards CASCADE;`,
+	}
+
+	// Executa os drops
+	for _, drop := range dropTables {
+		if _, err := DB.Exec(drop); err != nil {
+			return fmt.Errorf("erro ao executar drop table: %v", err)
+		}
+	}
+
+	// Defina as instruções SQL para criar as tabelas na ordem correta
 	tables := []string{
+		// 1. Primeiro cria users (sem dependências)
 		`
 		CREATE TABLE IF NOT EXISTS users (
 			user_id SERIAL PRIMARY KEY,
@@ -43,35 +60,35 @@ func InitializeDatabase() error {
 			updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP
 		);
 		`,
+		// 2. Depois cria rooms (sem dependências)
 		`
 		CREATE TABLE IF NOT EXISTS rooms (
 			room_id SERIAL PRIMARY KEY,
 			room_name VARCHAR(255),
-			created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+				created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 			is_active BOOLEAN DEFAULT TRUE
 		);
 		`,
+		// 3. Cria room_members (depende de users e rooms)
 		`
 		CREATE TABLE IF NOT EXISTS room_members (
-			room_id INT,
-			user_id INT,
+			room_id INT REFERENCES rooms(room_id),
+			user_id INT REFERENCES users(user_id),
 			joined_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-			PRIMARY KEY (room_id, user_id),
-			FOREIGN KEY (room_id) REFERENCES rooms(room_id),
-			FOREIGN KEY (user_id) REFERENCES users(user_id)
+			PRIMARY KEY (room_id, user_id)
 		);
 		`,
+		// 4. Cria messages (depende de users e rooms)
 		`
 		CREATE TABLE IF NOT EXISTS messages (
 			message_id SERIAL PRIMARY KEY,
-			room_id INT,
-			sender_id INT,
+			room_id INT REFERENCES rooms(room_id),
+			sender_id INT REFERENCES users(user_id),
 			content TEXT NOT NULL,
-			sent_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-			FOREIGN KEY (room_id) REFERENCES rooms(room_id),
-			FOREIGN KEY (sender_id) REFERENCES users(user_id)
+			sent_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP
 		);
 		`,
+		// 5. Cria giftcards (sem dependências)
 		`
 		CREATE TABLE IF NOT EXISTS giftcards (
 			id SERIAL PRIMARY KEY,
@@ -82,15 +99,17 @@ func InitializeDatabase() error {
 			updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP
 		);
 		`,
+		// 6. Cria a função para atualizar o timestamp
 		`
 		CREATE OR REPLACE FUNCTION update_modified_column()
 		RETURNS TRIGGER AS $$
 		BEGIN
-				NEW.updated_at = NOW();
-				RETURN NEW;
+			NEW.updated_at = NOW();
+			RETURN NEW;
 		END;
 		$$ LANGUAGE plpgsql;
 		`,
+		// 7. Cria os triggers
 		`
 		DROP TRIGGER IF EXISTS update_users_modified_time ON users;
 		CREATE TRIGGER update_users_modified_time
