@@ -1,6 +1,34 @@
+# Controle de versão
 .git
 .gitignore
-.env
+.gitattributes
+
+# Ambientes e configurações
+.env*
+*.log
+.editorconfig
+
+# Diretórios de desenvolvimento
 frontend/
 node_modules/
-README.md 
+tmp/
+dist/
+vendor/
+test/
+docs/
+
+# Arquivos de IDE/Editor
+.idea/
+.vscode/
+*.sublime-*
+*.swp
+*.swo
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Documentação e outros
+*.md
+LICENSE
+CHANGELOG*

@@ -1,24 +1,19 @@
 package config
 
 import (
-	"database/sql"
 	"fmt"
 	"log"
 	"os"
 
 	"github.com/joho/godotenv"
-	_ "github.com/lib/pq"
 	"github.com/stripe/stripe-go/v72"
 )
 
-var DB *sql.DB
-
-// Função para inicializar a chave do Stripe
+// InitStripe inicializa a chave do Stripe
 func InitStripe() {
-	// Carrega o arquivo .env
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatalf("Erro ao carregar o arquivo .env: %v", err)
+	// Tenta carregar o arquivo .env, mas não falha se não encontrar
+	if err := godotenv.Load(); err != nil {
+		log.Printf("Arquivo .env não encontrado, usando variáveis de ambiente do sistema")
 	}
 
 	// Inicialize a chave do Stripe
@@ -28,66 +23,28 @@ func InitStripe() {
 	}
 }
 
-// Função para abrir a conexão com o banco de dados
-func OpenConn() error {
-	// Carrega as variáveis de ambiente
-	err := godotenv.Load()
-	if err != nil {
-		log.Printf("Aviso: Arquivo .env não encontrado, usando variáveis de ambiente do sistema")
+func CheckDBConnection() {
+	if err := DB.Ping(); err != nil {
+		log.Fatalf("Erro ao verificar a conexão com o banco de dados: %v", err)
 	}
-
-	// Tenta primeiro usar DATABASE_URL (fornecido pelo Railway)
-	dbURL := os.Getenv("DATABASE_URL")
-	if dbURL != "" {
-		DB, err = sql.Open("postgres", dbURL)
-		if err != nil {
-			return err
-		}
-		return DB.Ping()
-	}
-
-	// Se não houver DATABASE_URL, usa as variáveis individuais
-	dbUser := os.Getenv("DB_USER")
-	dbPassword := os.Getenv("DB_PASSWORD")
-	dbName := os.Getenv("DB_NAME")
-	dbHost := os.Getenv("DB_HOST")
-	dbPort := os.Getenv("DB_PORT")
-
-	connStr := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=require",
-		dbHost, dbPort, dbUser, dbPassword, dbName)
-
-	DB, err = sql.Open("postgres", connStr)
-	if err != nil {
-		return err
-	}
-
-	return DB.Ping()
+	log.Println("Conexão com o banco de dados bem-sucedida")
 }
 
-// Função para fechar a conexão
-func CloseConn() error {
-	if DB != nil {
-		return DB.Close()
-	}
-	return nil
-}
-
-// Função para inicializar o banco de dados e criar a tabela 'giftcards' se não existir
 func InitializeDatabase() error {
-	// Verifica se a tabela 'giftcards' existe
-	query := `
-		CREATE TABLE IF NOT EXISTS giftcards (
+	// Exemplo simples de inicialização de banco de dados, como criar tabelas
+	// Aqui você pode adicionar suas tabelas ou outras inicializações do banco
+	_, err := DB.Exec(`
+		CREATE TABLE IF NOT EXISTS users (
 			id SERIAL PRIMARY KEY,
-			code VARCHAR(255) NOT NULL,
-			value NUMERIC(10, 2) NOT NULL,
-			status VARCHAR(50) NOT NULL
+			name VARCHAR(100),
+			email VARCHAR(100) UNIQUE
 		);
-	`
+	`)
 
-	_, err := DB.Exec(query)
 	if err != nil {
-		return fmt.Errorf("Erro ao criar tabela 'giftcards': %v", err)
+		return fmt.Errorf("erro ao inicializar o banco de dados: %v", err)
 	}
 
+	log.Println("Banco de dados inicializado com sucesso")
 	return nil
 }
