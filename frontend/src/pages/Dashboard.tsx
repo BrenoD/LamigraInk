@@ -34,7 +34,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     // Fetch active chats
-    fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/active-chats`)
+    fetch(`${process.env.NEXT_PUBLIC_BACKEND_API_WS_PROD}/active-chats`)
       .then((res) => res.json())
       .then((data) => {
         // Generate a unique time for each chat
