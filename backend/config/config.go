@@ -95,6 +95,7 @@ func InitializeDatabase() error {
 			code VARCHAR(255) NOT NULL UNIQUE,
 			value DECIMAL(10,2) NOT NULL,
 			status VARCHAR(50) NOT NULL DEFAULT 'active',
+			customer_name VARCHAR(255) NOT NULL,  -- Novo campo para nome do cliente
 			created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 			updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP
 		);
