@@ -6,7 +6,7 @@ import "./Dashboard.css";
 import { useGiftCard } from '../context/GiftCardContext';
 
 // Load Stripe with public key
-const stripePromise = loadStripe("pk_test_51QDnNpG6qzKVA8tL098WPy0ub0SSeO4Ef7ALXRwmCS6u0To001X8glppaNlKpWutvJsvvIWOXwiLaV60OWwQKG1p004hCSmskS");
+const stripePromise = loadStripe("pk_live_51QDnNpG6qzKVA8tLTR9Gepf1uyWETmM7UlkEjkJBj3RnPZKsMcCAJarkvCSYdLFAN8Eqr0pA2zSShHqIcyRD4VKH00HrHTC2sb");
 
 const CheckoutForm: React.FC = () => {
   const stripe = useStripe();
