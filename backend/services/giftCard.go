@@ -50,18 +50,19 @@ func disableGiftCard(code string) error {
 }
 
 func ProcessGiftCardCreationAndSendEmail(request models.GiftcardRequest) error {
-
 	code, err := CreateNewGiftCard(request.Value)
 	if err != nil {
 		return fmt.Errorf("Error creating gift card: %v", err)
 	}
 
 	giftcard := models.Giftcard{
-		Code:  code,
-		Value: request.Value,
+		Code:           code,
+		CustomerName:   request.RecipientName,  // Adicionando o nome do destinatário
+		Value:          request.Value,
+		Status:         "active",
 	}
 
-	err = SendGiftCardEmail(request, giftcard.Code)
+	err = SendGiftCardEmail(request, giftcard.Code)  // Envia o gift card por e-mail
 	if err != nil {
 		return fmt.Errorf("Error sending gift card via email: %v", err)
 	}

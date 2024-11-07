@@ -12,8 +12,7 @@ const stripePromise = loadStripe("pk_test_51QDnNpG6qzKVA8tL098WPy0ub0SSeO4Ef7ALX
 const CheckoutForm: React.FC = () => {
   const stripe = useStripe();
   const elements = useElements();
-  // const router = useRouter();
-  const { giftCardData } = useGiftCard();
+  const { giftCardData } = useGiftCard();  // Obtendo as informações do gift card
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -21,7 +20,7 @@ const CheckoutForm: React.FC = () => {
     setIsLoading(true);
   
     try {
-      console.log("Gift card data:", giftCardData); // Log do giftCardData
+      console.log("Gift card data:", giftCardData); // Logando as informações do gift card
   
       if (!stripe || !elements) {
         console.log("Stripe ou Elements não inicializado");
@@ -34,6 +33,7 @@ const CheckoutForm: React.FC = () => {
         return;
       }
   
+      // Envia o pedido de criação do Payment Intent para o backend
       const response = await fetch('https://lamigraink-production-4e5f.up.railway.app/create-payment-intent', {
         method: 'POST',
         headers: {
@@ -42,12 +42,12 @@ const CheckoutForm: React.FC = () => {
         },
         credentials: 'include',
         body: JSON.stringify({
-          value: giftCardData.amount,
-          artist: giftCardData.selectArtist,
+          value: giftCardData.amount,  // Enviando o valor do gift card
+          artist: giftCardData.selectArtist,  // Enviando o artista selecionado
         }),
       });
-      
-      console.log("Resposta da criação do Payment Intent:", response); // Log da resposta do Payment Intent
+
+      console.log("Resposta da criação do Payment Intent:", response);  // Log da resposta do Payment Intent
   
       if (!response.ok) {
         throw new Error("Erro ao criar Payment Intent");
@@ -80,15 +80,14 @@ const CheckoutForm: React.FC = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            recipientname: giftCardData.recipientName,
-            email: giftCardData.recipientEmail,
-            value: giftCardData.amount,
-            artist: giftCardData.selectArtist,
+            recipientname: giftCardData.recipientName,  // Enviando o nome do destinatário
+            email: giftCardData.recipientEmail,  // Enviando o e-mail do destinatário
+            value: giftCardData.amount,  // Enviando o valor
+            artist: giftCardData.selectArtist,  // Enviando o artista selecionado
           }),
         });
         
-  
-        console.log("Resposta da criação do gift card:", giftCardResponse); // Log da resposta da criação do gift card
+        console.log("Resposta da criação do gift card:", giftCardResponse);  // Log da resposta da criação do gift card
   
         if (!giftCardResponse.ok) {
           throw new Error("Falha ao criar o gift card" + giftCardResponse.statusText);
@@ -103,7 +102,6 @@ const CheckoutForm: React.FC = () => {
       setIsLoading(false);
     }
   };
-  
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">

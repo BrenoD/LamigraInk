@@ -64,7 +64,7 @@ func CreatePaymentIntentHandler(c *gin.Context) {
 	}
 
 	params := &stripe.PaymentIntentParams{
-		Amount:   stripe.Int64(int64(request.Value * 100)),
+		Amount:   stripe.Int64(int64(request.Value * 100)),  // Convertendo para o formato de centavos
 		Currency: stripe.String("gbp"),
 	}
 
@@ -77,8 +77,18 @@ func CreatePaymentIntentHandler(c *gin.Context) {
 		return
 	}
 
+	// Se o pagamento for bem-sucedido, cria o gift card
+	if intent.Status == stripe.PaymentIntentStatusSucceeded {
+		err = services.ProcessGiftCardCreationAndSendEmail(request)  // Cria o gift card e envia o e-mail
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": fmt.Sprintf("Error sending gift card: %v", err)})
+			return
+		}
+	}
+
 	c.JSON(http.StatusOK, gin.H{"client_secret": intent.ClientSecret})
 }
+
 
 
 // Handler para processar a criação do gift card e envio de email
