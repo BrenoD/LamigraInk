@@ -73,7 +73,7 @@ const CheckoutForm: React.FC = () => {
       if (paymentIntent?.status === "succeeded") {
         console.log("Pagamento sucedido, criando gift card...");
   
-        const giftCardResponse = await fetch(`${process.env.BACKEND_API_PROD}/gift-card`, {
+        const giftCardResponse = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API_PROD}/gift-card`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -85,6 +85,7 @@ const CheckoutForm: React.FC = () => {
             artist: giftCardData.selectArtist,
           }),
         });
+        
   
         console.log("Resposta da criação do gift card:", giftCardResponse); // Log da resposta da criação do gift card
   
