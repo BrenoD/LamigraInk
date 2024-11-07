@@ -9,15 +9,16 @@ import (
 	"github.com/google/uuid"
 )
 
-func CreateNewGiftCard(value float32) (string, error) {
-	query := "INSERT INTO giftcards (code, value, status) VALUES ($1, $2, $3)"
+func CreateNewGiftCard(customerName string, value float32) (string, error) {
+    query := "INSERT INTO giftcards (customer_name, code, value, status) VALUES ($1, $2, $3, $4)"
 
-	code := uuid.NewString()
-	status := "active"
+    code := uuid.NewString()
+    status := "active"
 
-	_, err := config.DB.Exec(query, code, value, status)
-	return code, err
+    _, err := config.DB.Exec(query, customerName, code, value, status)
+    return code, err
 }
+
 
 func UseGiftCard(code string) (float32, error) {
     var value float32
@@ -50,47 +51,55 @@ func disableGiftCard(code string) error {
 }
 
 func ProcessGiftCardCreationAndSendEmail(request models.GiftcardRequest) error {
-	code, err := CreateNewGiftCard(request.Value)
-	if err != nil {
-		return fmt.Errorf("Error creating gift card: %v", err)
-	}
+    // Agora passando o customer name para o CreateNewGiftCard
+    code, err := CreateNewGiftCard(request.CustomerName, request.Value)
+    if err != nil {
+        return fmt.Errorf("Error creating gift card: %v", err)
+    }
 
-	giftcard := models.Giftcard{
-		Code:           code,
-		CustomerName:   request.RecipientName,  // Adicionando o nome do destinatário
-		Value:          request.Value,
-		Status:         "active",
-	}
+    giftcard := models.Giftcard{
+        Code:           code,
+        CustomerName:   request.CustomerName,  // Usando o CustomerName
+        Value:          request.Value,
+        Status:         "active",
+    }
 
-	err = SendGiftCardEmail(request, giftcard.Code)  // Envia o gift card por e-mail
-	if err != nil {
-		return fmt.Errorf("Error sending gift card via email: %v", err)
-	}
+    err = SendGiftCardEmail(request, giftcard.Code)  // Envia o gift card por e-mail
+    if err != nil {
+        return fmt.Errorf("Error sending gift card via email: %v", err)
+    }
 
-	return nil
+    return nil
 }
 
+
 func ListGiftCards(offset int, limit int) ([]models.Giftcard, error) {
-	query := `
-		SELECT customer_name, value, code, status
-		FROM giftcards
-		ORDER BY created_at DESC
-		OFFSET $1 LIMIT $2;
-	`
+    query := `
+        SELECT customer_name, value, code, status
+        FROM giftcards
+        ORDER BY created_at DESC
+        OFFSET $1 LIMIT $2;
+    `
 
-	rows, err := config.DB.Query(query, offset, limit)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
+    rows, err := config.DB.Query(query, offset, limit)
+    if err != nil {
+        return nil, err
+    }
+    defer rows.Close()
 
-	var giftCards []models.Giftcard
-	for rows.Next() {
-		var gc models.Giftcard
-		if err := rows.Scan(&gc.CustomerName, &gc.Value, &gc.Code, &gc.Status); err != nil {
-			return nil, err
-		}
-		giftCards = append(giftCards, gc)
-	}
-	return giftCards, nil
+    var giftCards []models.Giftcard
+    for rows.Next() {
+        var gc models.Giftcard
+        if err := rows.Scan(&gc.CustomerName, &gc.Value, &gc.Code, &gc.Status); err != nil {
+            return nil, err
+        }
+        giftCards = append(giftCards, gc)
+    }
+
+    // Verificando se houve erro ao iterar pelas linhas
+    if err := rows.Err(); err != nil {
+        return nil, err
+    }
+
+    return giftCards, nil
 }

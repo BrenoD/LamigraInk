@@ -20,8 +20,8 @@ func CreateNewGiftCardHandler(c *gin.Context) {
 		return
 	}
 
-	// Cria o gift card no serviço
-	code, err := services.CreateNewGiftCard(request.Value)
+	// Cria o gift card no serviço (agora passando o customerName)
+	code, err := services.CreateNewGiftCard(request.CustomerName, request.Value)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": fmt.Sprintf("Error creating gift card: %v", err)})
 		return
@@ -32,6 +32,7 @@ func CreateNewGiftCardHandler(c *gin.Context) {
 		"giftcard_Code": code,
 	})
 }
+
 
 func ListGiftCardsHandler(c *gin.Context) {
 	// Parse o número da página a partir dos parâmetros de consulta
@@ -84,9 +85,10 @@ func CreatePaymentIntentHandler(c *gin.Context) {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": fmt.Sprintf("Error sending gift card: %v", err)})
 			return
 		}
+		c.JSON(http.StatusOK, gin.H{"message": "Payment successful and gift card created!"})
+	} else {
+		c.JSON(http.StatusPaymentRequired, gin.H{"error": "Payment failed"})
 	}
-
-	c.JSON(http.StatusOK, gin.H{"client_secret": intent.ClientSecret})
 }
 
 
@@ -110,3 +112,4 @@ func ProcessGiftCardCreationAndSendEmailHandler(c *gin.Context) {
 		"message": "Gift card successfully sent!",
 	})
 }
+
