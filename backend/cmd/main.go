@@ -83,7 +83,7 @@ func main() {
 		c.Next()
 	})
 
-	// Routes
+	// Routess
 	router.POST("/gift-card", handlers.ProcessGiftCardCreationAndSendEmailHandler)
 	router.POST("/create-payment-intent", handlers.CreatePaymentIntentHandler)
 	router.GET("/ws", func(c *gin.Context) {
