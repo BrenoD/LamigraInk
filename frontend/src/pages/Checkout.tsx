@@ -18,17 +18,21 @@ const CheckoutForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-
+  
     try {
+      console.log("Gift card data:", giftCardData); // Log do giftCardData
+  
       if (!stripe || !elements) {
+        console.log("Stripe ou Elements não inicializado");
         return;
       }
-
+  
       const cardNumberElement = elements.getElement(CardNumberElement);
       if (!cardNumberElement) {
-        throw new Error("Card elements not found");
+        console.error("Elementos do cartão não encontrados");
+        return;
       }
-
+  
       const response = await fetch('https://lamigraink-production-4e5f.up.railway.app/create-payment-intent', {
         method: 'POST',
         headers: {
@@ -42,12 +46,15 @@ const CheckoutForm: React.FC = () => {
         }),
       });
       
+      console.log("Resposta da criação do Payment Intent:", response); // Log da resposta do Payment Intent
+  
       if (!response.ok) {
-        throw new Error("Error creating Payment Intent");
+        throw new Error("Erro ao criar Payment Intent");
       }
-
+  
       const { client_secret } = await response.json();
-
+      console.log("Client Secret:", client_secret); // Log do client_secret
+  
       const { error, paymentIntent } = await stripe.confirmCardPayment(client_secret, {
         payment_method: {
           card: cardNumberElement,
@@ -57,12 +64,15 @@ const CheckoutForm: React.FC = () => {
           },
         },
       });
-
+  
       if (error) {
+        console.error("Erro no pagamento:", error.message);
         throw new Error(error.message);
       }
-
+  
       if (paymentIntent?.status === "succeeded") {
+        console.log("Pagamento sucedido, criando gift card...");
+  
         const giftCardResponse = await fetch(`${process.env.BACKEND_API}/gift-card`, {
           method: "POST",
           headers: {
@@ -75,20 +85,23 @@ const CheckoutForm: React.FC = () => {
             artist: giftCardData.selectArtist,
           }),
         });
-
+  
+        console.log("Resposta da criação do gift card:", giftCardResponse); // Log da resposta da criação do gift card
+  
         if (!giftCardResponse.ok) {
-          throw new Error("Failed to create gift card");
+          throw new Error("Falha ao criar o gift card");
         }
-
+  
         window.location.href = "/Success";
       }
     } catch (err) {
-      console.error("Error during checkout process:", err);
-      alert("An error occurred during the payment process. Please try again.");
+      console.error("Erro durante o processo de checkout:", err);
+      alert("Ocorreu um erro durante o processo de pagamento. Por favor, tente novamente.");
     } finally {
       setIsLoading(false);
     }
   };
+  
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
