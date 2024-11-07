@@ -31,7 +31,7 @@ func CheckDBConnection() {
 }
 
 func InitializeDatabase() error {
-	// Primeiro, drop todas as tabelas existentes
+	// Todo: remove that, we dont need to drop every time we make a deploy.
 	dropTables := []string{
 		`DROP TABLE IF EXISTS messages CASCADE;`,
 		`DROP TABLE IF EXISTS room_members CASCADE;`,

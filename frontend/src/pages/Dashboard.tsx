@@ -36,10 +36,10 @@ const Dashboard = () => {
     fetch(`${process.env.NEXT_PUBLIC_BACKEND_API_WS_PROD}/active-chats`)
       .then((res) => res.json())
       .then((data) => {
-        const chats = data.map((id: string) => ({
+        const chats = Array.isArray(data) ? data.map((id: string) => ({
           roomId: id,
           startTime: getRandomTime()
-        }));
+        })) : [];
         setActiveChats(chats);
       })
       .catch((error) => console.error("Error fetching active chats:", error));
@@ -52,7 +52,9 @@ const Dashboard = () => {
   const fetchGiftCards = (page: number) => {
     fetch(`${process.env.NEXT_PUBLIC_BACKEND_API_PROD}/gift-cards?page=${page}`)
       .then((res) => res.json())
-      .then((data) => setGiftCards(data))
+      .then((data) => {
+        setGiftCards(Array.isArray(data) ? data : []); // Verifica se é um array
+      })
       .catch((error) => console.error("Error fetching gift cards:", error));
   };
 
@@ -98,7 +100,6 @@ const Dashboard = () => {
       })
       .catch((error) => console.error("Error using gift card:", error));
   };
-
 
   const getStatusTextColor = (status: string) => {
     switch (status) {
@@ -147,25 +148,29 @@ const Dashboard = () => {
         <div className="w-full lg:w-1/2 bg-gray-700 bg-opacity-80 p-6 rounded-lg shadow-lg flex flex-col h-full">
           <h2 className="text-xl font-semibold mb-4 text-center">Gift Cards</h2>
           <div className="bg-gray-800 p-6 rounded-lg shadow-lg flex-grow">
-            {giftCards.map((gc) => (
-              <div key={gc.id} className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg mb-4 shadow-md transition duration-300 ease-in-out transform hover:scale-105">
-                <div className="flex justify-between items-center">
-                  <div>
-                    <p><strong>Customer:</strong> {gc.customer_name}</p>
-                    <p><strong>Value:</strong> ${gc.value}</p>
-                    <p><strong>Code:</strong> {gc.code}</p>
-                    <p className="text-sm">Status: <span className={getStatusTextColor(gc.status)}>{gc.status}</span></p>
-                  </div>
-                  <button
+            {giftCards.length > 0 ? (
+              giftCards.map((gc) => (
+                <div key={gc.id} className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg mb-4 shadow-md transition duration-300 ease-in-out transform hover:scale-105">
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <p><strong>Customer:</strong> {gc.customer_name}</p>
+                      <p><strong>Value:</strong> ${gc.value}</p>
+                      <p><strong>Code:</strong> {gc.code}</p>
+                      <p className="text-sm">Status: <span className={getStatusTextColor(gc.status)}>{gc.status}</span></p>
+                    </div>
+                    <button
                       className="bg-green-500 text-white px-4 py-2 rounded-md font-bold hover:bg-green-400 transition duration-300"
                       // eslint-disable-next-line react-hooks/rules-of-hooks
                       onClick={() => useGiftCard(gc.code)}
                     >
                       Use Gift Card
-                  </button>
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <p className="text-center text-gray-400">No gift cards available.</p>
+            )}
 
             {/* Pagination Controls */}
             <div className="flex justify-center space-x-4 mt-4">
