@@ -10,6 +10,7 @@ type Giftcard struct{
 
 type GiftcardRequest struct {
     RecipientName string  `json:"recipientname"`  // Nome do destinatário
+    CustomerName    string `json:customername`
     Email         string  `json:"email"`  // E-mail do destinatário
     Value         float32 `json:"value"`  // Valor do gift card
     Artist        string  `json:"artist"`  // Artista selecionado
