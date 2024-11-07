@@ -85,7 +85,7 @@ func main() {
 
 	// Routes
 	router.POST("/gift-card", handlers.ProcessGiftCardCreationAndSendEmailHandler)
-	router.GET("/gift-cards", handlers.ListGiftCardsHandler)
+	router.GET("/gift-cards", handlers.ListGiftCardsHandler) // .
 	router.POST("/create-payment-intent", handlers.CreatePaymentIntentHandler)
 	router.GET("/ws", func(c *gin.Context) {
 		handlers.HandleConnections(c.Writer, c.Request)
