@@ -73,7 +73,7 @@ const CheckoutForm: React.FC = () => {
       if (paymentIntent?.status === "succeeded") {
         console.log("Pagamento sucedido, criando gift card...");
   
-        const giftCardResponse = await fetch(`${process.env.BACKEND_API}/gift-card`, {
+        const giftCardResponse = await fetch(`${process.env.BACKEND_API_PROD}/gift-card`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
