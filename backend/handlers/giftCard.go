@@ -5,6 +5,7 @@ import (
 	"LaMigraInk/backend/services"
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/stripe/stripe-go/v72"
@@ -30,6 +31,28 @@ func CreateNewGiftCardHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"giftcard_Code": code,
 	})
+}
+
+func ListGiftCardsHandler(c *gin.Context) {
+	// Parse o número da página a partir dos parâmetros de consulta
+	pageStr := c.Query("page")
+	page, err := strconv.Atoi(pageStr)
+	if err != nil || page < 1 {
+		page = 1 // Define a página padrão como 1, caso seja inválida
+	}
+
+	// Define o número de itens por página
+	const pageSize = 10
+	offset := (page - 1) * pageSize
+
+	// Chama o serviço para obter os gift cards
+	giftCards, err := services.ListGiftCards(offset, pageSize)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch gift cards"})
+		return
+	}
+
+	c.JSON(http.StatusOK, giftCards)
 }
 
 // Handler para criar um Payment Intent no Stripe

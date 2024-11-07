@@ -68,3 +68,28 @@ func ProcessGiftCardCreationAndSendEmail(request models.GiftcardRequest) error {
 
 	return nil
 }
+
+func ListGiftCards(offset int, limit int) ([]models.Giftcard, error) {
+	query := `
+		SELECT customer_name, value, code, status
+		FROM giftcards
+		ORDER BY created_at DESC
+		OFFSET $1 LIMIT $2;
+	`
+
+	rows, err := config.DB.Query(query, offset, limit)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var giftCards []models.Giftcard
+	for rows.Next() {
+		var gc models.Giftcard
+		if err := rows.Scan(&gc.CustomerName, &gc.Value, &gc.Code, &gc.Status); err != nil {
+			return nil, err
+		}
+		giftCards = append(giftCards, gc)
+	}
+	return giftCards, nil
+}

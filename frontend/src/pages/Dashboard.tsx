@@ -9,8 +9,11 @@ interface Chat {
   startTime: string;
 }
 
-interface Voucher {
+interface GiftCard {
   id: string;
+  customer_name: string;
+  value: number;
+  code: string;
   status: string;
 }
 
@@ -25,27 +28,33 @@ const getRandomTime = () => {
 const Dashboard = () => {
   const [activeChats, setActiveChats] = useState<Chat[]>([]);
   const [selectedChat, setSelectedChat] = useState<string | null>(null);
-  const [vouchers, setVouchers] = useState<Voucher[]>([
-    { id: "id9147344", status: "Pending" },
-    { id: "id9147345", status: "Cancelled" },
-    { id: "id9147346", status: "Paid (not verified)" },
-    { id: "id9147347", status: "Paid (verified)" }
-  ]);
+  const [giftCards, setGiftCards] = useState<GiftCard[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     // Fetch active chats
     fetch(`${process.env.NEXT_PUBLIC_BACKEND_API_WS_PROD}/active-chats`)
       .then((res) => res.json())
       .then((data) => {
-        // Generate a unique time for each chat
         const chats = data.map((id: string) => ({
           roomId: id,
-          startTime: getRandomTime() // Assign a unique start time for each chat
+          startTime: getRandomTime()
         }));
         setActiveChats(chats);
       })
       .catch((error) => console.error("Error fetching active chats:", error));
   }, []);
+
+  useEffect(() => {
+    fetchGiftCards(currentPage);
+  }, [currentPage]);
+
+  const fetchGiftCards = (page: number) => {
+    fetch(`${process.env.NEXT_PUBLIC_BACKEND_API_PROD}/gift-cards?page=${page}`)
+      .then((res) => res.json())
+      .then((data) => setGiftCards(data))
+      .catch((error) => console.error("Error fetching gift cards:", error));
+  };
 
   const formatChatTime = (isoString: string) => {
     const chatDate = new Date(isoString);
@@ -74,14 +83,22 @@ const Dashboard = () => {
     }
   };
 
-  // Function to verify the voucher
-  const verifyVoucher = (id: string) => {
-    setVouchers((prevVouchers) =>
-      prevVouchers.map((voucher) =>
-        voucher.id === id ? { ...voucher, status: "Paid (verified)" } : voucher
-      )
-    );
+  // Função comum para usar o gift card
+  const useGiftCard = (code: string) => {
+    fetch(`${process.env.NEXT_PUBLIC_BACKEND_API_PROD}/useGiftCard`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ code }),
+    })
+      .then((res) => res.json())
+      .then(() => {
+        fetchGiftCards(currentPage); // Atualiza a lista de gift cards após o uso
+      })
+      .catch((error) => console.error("Error using gift card:", error));
   };
+
 
   const getStatusTextColor = (status: string) => {
     switch (status) {
@@ -103,11 +120,9 @@ const Dashboard = () => {
       <h1 className="text-3xl font-bold text-center mb-4">Attendant Dashboard</h1>
 
       <div className="flex flex-col lg:flex-row flex-grow space-y-6 lg:space-y-0 lg:space-x-6 h-full">
-
         {/* Active Chats Section */}
         <div className="w-full lg:w-1/2 bg-gray-700 bg-opacity-80 p-6 rounded-lg shadow-lg flex flex-col h-full">
           <h2 className="text-xl font-semibold mb-4 text-center">Active Chats</h2>
-
           <div className="bg-gray-800 p-6 rounded-lg shadow-lg flex-grow">
             {activeChats.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
@@ -128,39 +143,44 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Payment Section */}
+        {/* Gift Cards Section */}
         <div className="w-full lg:w-1/2 bg-gray-700 bg-opacity-80 p-6 rounded-lg shadow-lg flex flex-col h-full">
-          <h2 className="text-xl font-semibold mb-4 text-center">Payments</h2>
+          <h2 className="text-xl font-semibold mb-4 text-center">Gift Cards</h2>
           <div className="bg-gray-800 p-6 rounded-lg shadow-lg flex-grow">
-            <p className="text-gray-300 mb-4">Manage customer payments here.</p>
-
-            {/* Vouchers */}
-            <div className="mt-4">
-              <h3 className="text-lg font-semibold text-white mb-2">Vouchers:</h3>
-              {vouchers.map((voucher) => (
-                <div key={voucher.id} className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg mb-4 shadow-md transition duration-300 ease-in-out transform hover:scale-105">
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <span className="font-semibold">Voucher ID: </span>{voucher.id}
-                    </div>
-                    <span className={`font-semibold ${getStatusTextColor(voucher.status)}`}>
-                      {voucher.status}
-                    </span>
+            {giftCards.map((gc) => (
+              <div key={gc.id} className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg mb-4 shadow-md transition duration-300 ease-in-out transform hover:scale-105">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <p><strong>Customer:</strong> {gc.customer_name}</p>
+                    <p><strong>Value:</strong> ${gc.value}</p>
+                    <p><strong>Code:</strong> {gc.code}</p>
+                    <p className="text-sm">Status: <span className={getStatusTextColor(gc.status)}>{gc.status}</span></p>
                   </div>
-
-                  {/* Verify Button appears only if the status is "Paid (not verified)" */}
-                  {voucher.status === "Paid (not verified)" && (
-                    <div className="mt-2">
-                      <button
-                        className="bg-green-500 text-white px-4 py-2 rounded-md font-bold hover:bg-green-400 transition duration-300"
-                        onClick={() => verifyVoucher(voucher.id)}
-                      >
-                        ✅ Verify
-                      </button>
-                    </div>
-                  )}
+                  <button
+                      className="bg-green-500 text-white px-4 py-2 rounded-md font-bold hover:bg-green-400 transition duration-300"
+                      // eslint-disable-next-line react-hooks/rules-of-hooks
+                      onClick={() => useGiftCard(gc.code)}
+                    >
+                      Use Gift Card
+                  </button>
                 </div>
-              ))}
+              </div>
+            ))}
+
+            {/* Pagination Controls */}
+            <div className="flex justify-center space-x-4 mt-4">
+              <button 
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))} 
+                className="bg-gray-500 px-3 py-1 rounded hover:bg-gray-400"
+              >
+                Previous
+              </button>
+              <button 
+                onClick={() => setCurrentPage((prev) => prev + 1)} 
+                className="bg-gray-500 px-3 py-1 rounded hover:bg-gray-400"
+              >
+                Next
+              </button>
             </div>
           </div>
         </div>
