@@ -89,7 +89,7 @@ const CheckoutForm: React.FC = () => {
         console.log("Resposta da criação do gift card:", giftCardResponse); // Log da resposta da criação do gift card
   
         if (!giftCardResponse.ok) {
-          throw new Error("Falha ao criar o gift card");
+          throw new Error("Falha ao criar o gift card" + giftCardResponse.statusText);
         }
   
         window.location.href = "/Success";
